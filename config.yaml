@@ -1,0 +1,43 @@
+# Oykos Triage AI — Configuration
+# Override any setting via CLI flags or environment variables
+
+provider: openai
+mode: baseline
+
+# Provider-specific model defaults
+# Override with: python cli.py extract --provider gemini --model gemini-2.5-pro
+openai:
+  frontier_model: gpt-4o
+  cheap_model: gpt-4o-mini
+
+anthropic:
+  frontier_model: claude-sonnet-4-20250514
+  cheap_model: claude-3-5-haiku-20241022
+
+gemini:
+  frontier_model: gemini-2.5-flash
+  cheap_model: gemini-2.0-flash
+
+# Pipeline settings (only used in pipeline mode)
+pipeline:
+  top_k_candidates: 15
+  rrf_k_constant: 60
+
+embedding:
+  model: intfloat/multilingual-e5-large-instruct
+
+# Confidence gating thresholds
+gating:
+  high_threshold: 0.7
+  review_threshold: 0.4
+
+# Evaluation settings
+evaluation:
+  recall_floor: 0.85
+  min_support_for_floor: 8
+
+# General
+temperature: 0.0
+cache_system_prompt: true
+use_verifier: false
+max_concurrency: 5

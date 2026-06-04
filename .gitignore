@@ -1,0 +1,39 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Caches
+data/cache/
+*.npz
+
+# Evaluation results (generated, not source)
+data/test/eval_*.json
+
+# Backup files
+*.bak
+
+# Original data sources (too large / proprietary)
+*.xlsx
+*.docx
+
+# Claude config
+.claude/

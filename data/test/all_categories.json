@@ -1,0 +1,956 @@
+[
+  {
+    "code": "SI001",
+    "macro_category": "Sintomi",
+    "label_it": "Febbre",
+    "label_en": "Fever",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "La pelle del bambino può apparire più calda del solito al tatto, con guance arrossate, sudorazione o brividi visibili. La temperatura misurata con un termometro sotto le ascelle risulta più alta del valore abituale del bambino."
+  },
+  {
+    "code": "SI002",
+    "macro_category": "Sintomi",
+    "label_it": "Mal di gola",
+    "label_en": "Sore throat",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino può mostrare difficoltà a deglutire, toccarsi spesso il collo o la gola e parlare con voce più bassa o rauca. Può aprire la bocca per mostrare fastidio o evitare cibi solidi durante il pasto."
+  },
+  {
+    "code": "SI003",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore addominale",
+    "label_en": "Abdominal pain",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino indica o tocca spesso la pancia, mostrando fastidio nella zona tra petto e bacino. Può piegarsi in avanti, cambiare postura o interrompere le attività mentre avverte il disagio."
+  },
+  {
+    "code": "SI004",
+    "macro_category": "Sintomi",
+    "label_it": "Vomito",
+    "label_en": "Vomiting",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino espelle con forza contenuto dallo stomaco attraverso la bocca. Prima o dopo l'episodio possono vedersi conati, saliva in eccesso o residui sul pavimento, sugli abiti o intorno alla bocca."
+  },
+  {
+    "code": "SI005",
+    "macro_category": "Sintomi",
+    "label_it": "Diarrea",
+    "label_en": "Diarrhea",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino evacua tre o più volte in 24 ore feci molto più liquide o semiliquide del solito. Nel pannolino, nel vasino o nel water il contenuto appare acquoso o poco formato rispetto alla consistenza abituale."
+  },
+  {
+    "code": "SI006",
+    "macro_category": "Sintomi",
+    "label_it": "Difficoltà respiratoria",
+    "label_en": "Breathing difficulty",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino fatica visibilmente a respirare. Si notano rientramenti della pelle alla base del collo o sotto le costole, respiro molto veloce o affannoso."
+  },
+  {
+    "code": "SI007",
+    "macro_category": "Sintomi",
+    "label_it": "Tosse",
+    "label_en": "Cough",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino emette colpi di tosse ripetuti, secchi o rumorosi, con movimenti del torace o della gola ben visibili. La tosse può interrompere il respiro normale o le attività quotidiane mentre avviene."
+  },
+  {
+    "code": "SI008",
+    "macro_category": "Sintomi",
+    "label_it": "Naso ostruito o che cola",
+    "label_en": "Nasal congestion or runny nose",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino respira con la bocca perché il passaggio nasale appare bloccato oppure si osserva fuoriuscita di muco dal naso, che può colare sulla narice o richiedere soffi frequenti."
+  },
+  {
+    "code": "SI009",
+    "macro_category": "Sintomi",
+    "label_it": "Mal di orecchio",
+    "label_en": "Ear pain",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino tocca spesso un orecchio, inclina la testa da un lato o copre la zona con la mano, mostrando fastidio quando l'orecchio viene sfiorato. Può reagire ai suoni o muoversi in modo cauto. In alternativa può dire a voce che gli fa male l'orecchio."
+  },
+  {
+    "code": "SI010",
+    "macro_category": "Sintomi",
+    "label_it": "Occhio rosso",
+    "label_en": "Red eye",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "La parte bianca dell'occhio o l'interno della palpebra sono arrossati."
+  },
+  {
+    "code": "SI011",
+    "macro_category": "Sintomi",
+    "label_it": "Secrezioni oculari",
+    "label_en": "Eye discharge",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "L'occhio produce muco giallo/verde o lacrime dense che 'incollano' le ciglia, specialmente al risveglio."
+  },
+  {
+    "code": "SI012",
+    "macro_category": "Sintomi",
+    "label_it": "Occhio gonfio",
+    "label_en": "Swollen eye",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Una o entrambe le palpebre appaiono visibilmente ingrossate o più spesse del solito."
+  },
+  {
+    "code": "SI013",
+    "macro_category": "Sintomi",
+    "label_it": "Trauma cranico",
+    "label_en": "Head trauma",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "È presente un urto visibile alla testa, con gonfiore, arrossamento o un bernoccolo nella zona colpita. Si possono notare anche piccole abrasioni o un punto dolente al tatto."
+  },
+  {
+    "code": "SI014",
+    "macro_category": "Sintomi",
+    "label_it": "Mal di testa",
+    "label_en": "Headache",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino porta le mani alla fronte, alle tempie o alla nuca, mostrando fastidio nei movimenti o interrompendo ciò che sta facendo. Può muoversi con cautela o mantenere il volto teso. In alternativa può dire a voce che gli fa male la testa."
+  },
+  {
+    "code": "SI015",
+    "macro_category": "Sintomi",
+    "label_it": "Lesioni cutanee",
+    "label_en": "Skin lesions",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Sulla pelle del bambino compaiono aree visivamente alterate rispetto al resto della cute, come macchie, puntini, arrossamenti, vescicole o piccole croste. Le zone interessate possono avere colore, forma o superficie differenti dalla pelle circostante."
+  },
+  {
+    "code": "SI016",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore all'occhio",
+    "label_en": "Eye pain",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino tiene l'occhio semi chiuso, evita la luce o si tocca ripetutamente la zona."
+  },
+  {
+    "code": "SI017",
+    "macro_category": "Sintomi",
+    "label_it": "Ingestione sostanza tossica",
+    "label_en": "Toxic substance ingestion",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino viene visto mettere in bocca e deglutire un materiale o un liquido che normalmente non si beve o non si mangia. Possono rimanere residui sulla bocca, sulle mani o sul contenitore da cui ha preso la sostanza."
+  },
+  {
+    "code": "SI018",
+    "macro_category": "Sintomi",
+    "label_it": "Stipsi",
+    "label_en": "Constipation",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino evacua feci dure, secche o in piccoli frammenti, con sforzo evidente o intervalli più lunghi del solito tra una evacuazione e l'altra. Può irrigidirsi, contrarre il volto o interrompere l'evacuazione per il fastidio."
+  },
+  {
+    "code": "SI019",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore o bruciore nella minzione",
+    "label_en": "Pain or burning during urination",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino mostra fastidio mentre urina, irrigidendo il corpo o cambiando espressione durante il flusso. Può fermarsi, interrompere la minzione o toccarsi la zona genitale subito dopo aver urinato."
+  },
+  {
+    "code": "SI020",
+    "macro_category": "Sintomi",
+    "label_it": "Insonnia",
+    "label_en": "Insomnia",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino fatica ad addormentarsi, rimanendo sveglio nel letto con movimenti continui o cambiando spesso posizione. Può tenere gli occhi aperti per lunghi intervalli o alzarsi ripetutamente."
+  },
+  {
+    "code": "SI021",
+    "macro_category": "Sintomi",
+    "label_it": "Risvegli notturni",
+    "label_en": "Night awakenings",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino si sveglia completamente più volte per notte, agitato o spaventato, e fatica a riaddormentarsi (diverso dai normali micro-risvegli"
+  },
+  {
+    "code": "SI022",
+    "macro_category": "Sintomi",
+    "label_it": "Russamento nel sonno",
+    "label_en": "Snoring during sleep",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino emette un suono forte e continuo durante la respirazione nel sonno, udibile anche a distanza. Il ritmo del rumore rimane costante per tutta la durata del respiro."
+  },
+  {
+    "code": "SI023",
+    "macro_category": "Sintomi",
+    "label_it": "Sonnambulismo",
+    "label_en": "Sleepwalking",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino si alza dal letto mentre dorme e compie movimenti come camminare o aprire porte con lo sguardo fisso o assente. Può sembrare sveglio ma non risponde in modo coerente agli stimoli."
+  },
+  {
+    "code": "SI024",
+    "macro_category": "Sintomi",
+    "label_it": "Apnee nel sonno",
+    "label_en": "Sleep apnea",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino smette di respirare per alcuni secondi mentre dorme, per poi riprendere con un sussulto o un respiro rumoroso."
+  },
+  {
+    "code": "SI025",
+    "macro_category": "Sintomi",
+    "label_it": "Bruxismo",
+    "label_en": "Bruxism",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino stringe o digrigna i denti, spesso producendo un suono di sfregamento udibile soprattutto durante il sonno. La mascella può apparire in movimento mentre dorme."
+  },
+  {
+    "code": "SI026",
+    "macro_category": "Sintomi",
+    "label_it": "Inappetenza",
+    "label_en": "Lack of appetite",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "In più pasti consecutivi, il bambino lascia spesso il cibo nel piatto, mangia quantità chiaramente inferiori al solito o interrompe il pasto dopo pochi assaggi. Può spostare il cibo, rifiutare il cucchiaio o allontanare il piatto."
+  },
+  {
+    "code": "SI027",
+    "macro_category": "Sintomi",
+    "label_it": "Iperfagia",
+    "label_en": "Excessive appetite",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino chiede cibo molto frequentemente e mangia quantità insolitamente elevate per lui, anche subito dopo un pasto. Può cercare continuamente alimenti, aprire ripetutamente il frigorifero o insistere nel voler mangiare."
+  },
+  {
+    "code": "SI028",
+    "macro_category": "Sintomi",
+    "label_it": "Polidipsia",
+    "label_en": "Polydipsia",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino beve molto più del solito e chiede acqua con grande frequenza. Può finire rapidamente bicchieri o borracce e cercare ripetutamente da bere durante la giornata."
+  },
+  {
+    "code": "SI029",
+    "macro_category": "Sintomi",
+    "label_it": "Convulsioni",
+    "label_en": "Seizures",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino presenta movimenti involontari e ripetuti del corpo, come scatti o tremori, spesso accompagnati da irrigidimento. Durante l episodio può avere lo sguardo fisso o non rispondere agli stimoli."
+  },
+  {
+    "code": "SI030",
+    "macro_category": "Sintomi",
+    "label_it": "Nausea",
+    "label_en": "Nausea",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino appare infastidito allo stomaco, portando spesso la mano alla bocca o alla pancia e interrompendo ciò che sta facendo. Può diventare pallido, deglutire ripetutamente o fare smorfie come se stesse per vomitare. In alternativa può dire a voce che sente lo stomaco che gli dà fastidio."
+  },
+  {
+    "code": "SI031",
+    "macro_category": "Sintomi",
+    "label_it": "Lesioni del cavo orale",
+    "label_en": "Oral lesions",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Nel cavo orale del bambino si notano piccole aree arrossate, puntini, tagli o afte visibili su labbra, gengive, lingua o guance interne. Durante i pasti o mentre parla può toccarsi spesso la zona con la lingua o apparire infastidito al contatto con il cibo."
+  },
+  {
+    "code": "SI032",
+    "macro_category": "Sintomi",
+    "label_it": "Sanguinamento dal naso",
+    "label_en": "Nosebleed",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Si osserva fuoriuscita di sangue da una o entrambe le narici, con gocce che possono colare sul labbro, sul viso o sui fazzoletti usati per tamponare. Il bambino può toccarsi spesso il naso o inclinare la testa per gestire il flusso."
+  },
+  {
+    "code": "SI033",
+    "macro_category": "Sintomi",
+    "label_it": "Irrequietezza o pianto inconsolabile",
+    "label_en": "Restlessness or inconsolable crying",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino piange a lungo senza riuscire a calmarsi, con un pianto intenso e continuo. Può muovere braccia e gambe in modo agitato, cambiare spesso posizione o cercare contatto senza trovare sollievo."
+  },
+  {
+    "code": "SI034",
+    "macro_category": "Sintomi",
+    "label_it": "Prurito o bruciore anale o delle aree genitali",
+    "label_en": "Anal or genital itching or burning",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino si gratta spesso la zona anale o genitale, muovendo le mani o sfregando la parte contro indumenti o superfici. Può cambiare posizione di frequente o toccarsi ripetutamente la zona come segno di fastidio."
+  },
+  {
+    "code": "SI035",
+    "macro_category": "Sintomi",
+    "label_it": "Arrossamento o gonfiore anale o delle aree genitali",
+    "label_en": "Anal or genital redness or swelling",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "La pelle nella zona anale o genitale appare arrossata o più voluminosa rispetto al solito, con un cambiamento di colore o di forma evidente. La parte può sembrare più tesa o sporgente quando il bambino si muove o viene cambiato."
+  },
+  {
+    "code": "SI036",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore al ginocchio",
+    "label_en": "Knee pain",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino limita i movimenti della gamba, tocca spesso il ginocchio o cammina con un'andatura irregolare quando lo usa. Può piegarsi con cautela, sedersi lentamente o mostrare espressioni di fastidio quando il ginocchio viene mosso o sfiorato. In alternativa può dire a voce che gli fa male il ginocchio."
+  },
+  {
+    "code": "SI037",
+    "macro_category": "Sintomi",
+    "label_it": "Poliuria (emissione di abbondante quantità di urina)",
+    "label_en": "Polyuria",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino urina molto più spesso del solito, con frequenti passaggi al bagno nell'arco della giornata. I pannolini o il vaso possono riempirsi rapidamente e in quantità visibilmente maggiori rispetto al normale."
+  },
+  {
+    "code": "SI038",
+    "macro_category": "Sintomi",
+    "label_it": "Pollachiuria (necessità di urinare molto spesso ma con piccole quantità)",
+    "label_en": "Pollakiuria",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino urina molte volte in brevi intervalli, entrando spesso in bagno anche se la quantità di urina espulsa è piccola. Può interrompere le attività per andare ripetutamente a fare pipì durante la giornata."
+  },
+  {
+    "code": "SI039",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore muscolare/Scheletrico",
+    "label_en": "Muscle or skeletal pain",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino indica o tocca una zona precisa del corpo dove avverte fastidio, che può essere lungo un muscolo oppure su un punto osseo ben definito. Può muovere quella parte con cautela, evitare alcuni gesti o interrompere un'attività quando la zona viene coinvolta. In alternativa può dire a voce che gli fa male un muscolo o un osso."
+  },
+  {
+    "code": "SI040",
+    "macro_category": "Sintomi",
+    "label_it": "Sincope, collasso",
+    "label_en": "Syncope or collapse",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino perde improvvisamente forza e tono muscolare, cadendo o accasciandosi a terra. Per alcuni momenti può rimanere immobile, con occhi chiusi o semi chiusi e mancanza di risposta agli stimoli."
+  },
+  {
+    "code": "SI041",
+    "macro_category": "Sintomi",
+    "label_it": "Vertigini, capogiro",
+    "label_en": "Dizziness or lightheadedness",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino appare instabile, tende a barcollare o a perdere l equilibrio mentre cammina o sta in piedi. Può chiudere gli occhi, aggrapparsi a qualcosa o fermarsi improvvisamente come se tutto si muovesse intorno a lui."
+  },
+  {
+    "code": "SI042",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore articolare",
+    "label_en": "Joint pain",
+    "triage_depth": "Alta",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino muove con difficoltà una zona dove due parti del corpo si piegano, come ginocchio, gomito o polso, piegandola meno del solito o evitando di appoggiarci peso. Può toccare spesso quel punto, camminare in modo diverso o mostrare fastidio quando la piega o quando viene sfiorata. In alternativa può dire a voce che gli fa male in quel punto che si piega."
+  },
+  {
+    "code": "SI043",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore dentale",
+    "label_en": "Dental pain",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino si tocca la guancia o la bocca, mastica da un solo lato o evita cibi che richiedono morsi più decisi. Può interrompere il pasto, portare la mano alla zona interessata o mostrare smorfie quando i denti entrano in contatto con il cibo. In alternativa può dire a voce che gli fa male un dente."
+  },
+  {
+    "code": "SI044",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore toracico",
+    "label_en": "Chest pain",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino porta la mano al petto, rallenta i movimenti o interrompe ciò che sta facendo quando avverte fastidio nella zona tra collo e addome. Può fare smorfie o respirare con cautela durante il dolore. In alternativa può dire a voce che gli fa male il petto."
+  },
+  {
+    "code": "SI045",
+    "macro_category": "Sintomi",
+    "label_it": "Dolore inguino-genitale",
+    "label_en": "Inguinal genital pain",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino mostra fastidio localizzato all'inguine o ai genitali, toccando spesso la zona o modificando postura e movimenti quando cammina o si siede. Può interrompere le attività o apparire infastidito al contatto con indumenti nella parte interessata."
+  },
+  {
+    "code": "SI046",
+    "macro_category": "Sintomi",
+    "label_it": "Enuresi notturna",
+    "label_en": "Nocturnal enuresis",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino bagna il letto durante il sonno, trovando il pigiama o le lenzuola umidi al risveglio. L'episodio avviene senza che il bambino si svegli o mostri segni di accorgersene durante la notte."
+  },
+  {
+    "code": "SI047",
+    "macro_category": "Sintomi",
+    "label_it": "Irregolarità mestruali",
+    "label_en": "Menstrual irregularities",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il ciclo mestruale della bambina o adolescente non segue un intervallo costante, con mestruazioni che compaiono prima o dopo rispetto ai tempi abituali. La quantità di flusso o la durata possono variare visibilmente da un episodio all'altro."
+  },
+  {
+    "code": "SI048",
+    "macro_category": "Sintomi",
+    "label_it": "Ansia",
+    "label_en": "Anxiety",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino appare agitato o irrequieto, con movimenti continui delle mani o del corpo. Può mostrarsi teso nel volto, respirare più rapidamente del solito o faticare a restare fermo in situazioni quotidiane."
+  },
+  {
+    "code": "SI049",
+    "macro_category": "Sintomi",
+    "label_it": "Singhiozzo",
+    "label_en": "Hiccups",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino emette piccoli suoni ripetuti e involontari, come brevi colpi che interrompono per un attimo il respiro o il discorso. Il torace o la pancia si muovono a scatti in modo ritmico a ogni singhiozzo."
+  },
+  {
+    "code": "SI050",
+    "macro_category": "Sintomi",
+    "label_it": "Tremore",
+    "label_en": "Tremor",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino mostra scuotimenti rapidi, ripetuti e involontari di una parte del corpo, come mani, braccia o testa. I movimenti sono visibili anche quando prova a tenerli fermi. E' diverso dalle convulsioni perché il bambino è sveglio e cosciente."
+  },
+  {
+    "code": "SI051",
+    "macro_category": "Sintomi",
+    "label_it": "Disturbi della vista",
+    "label_en": "Vision disturbances",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino riferisce di vedere doppio, sfocato, macchie scure o lampi di luce. Nei più piccoli il bambino strizza gli occhi, avvicina molto gli oggetti al viso oppure li allontana ripetutamente. Può inclinare la testa o socchiudere le palpebre per mettere a fuoco."
+  },
+  {
+    "code": "SI052",
+    "macro_category": "Sintomi",
+    "label_it": "Zoppìa",
+    "label_en": "Limping",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino cammina con un passo irregolare, appoggiando meno peso su una gamba o evitando di usarla pienamente. Il movimento appare asimmetrico e può essere visibile un trascinamento o un'andatura più lenta su un lato."
+  },
+  {
+    "code": "SI053",
+    "macro_category": "Sintomi",
+    "label_it": "Rigonfiamento di una ghiandola",
+    "label_en": "Swollen gland",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "In una zona del collo, dell'ascella o dell'inguine si nota una piccola sporgenza o un aumento di volume rispetto al lato opposto. Al tatto la parte può apparire più evidente e modificare leggermente il profilo della pelle."
+  },
+  {
+    "code": "SI054",
+    "macro_category": "Sintomi",
+    "label_it": "Alitosi",
+    "label_en": "Halitosis",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Quando il bambino parla, respira vicino a qualcuno o sbadiglia, dalla bocca si percepisce un odore sgradevole e persistente. L'odore è evidente soprattutto quando ci si trova a poca distanza dal suo viso."
+  },
+  {
+    "code": "SI055",
+    "macro_category": "Sintomi",
+    "label_it": "Andatura instabile",
+    "label_en": "Unstable gait",
+    "triage_depth": "Media",
+    "completion_status": "8-Inserito TB da testare",
+    "short_definition": "Il bambino cammina con passi irregolari, inciampa facilmente o tende a perdere l equilibrio. Può allargare i piedi o muoversi lentamente per mantenere la stabilità."
+  },
+  {
+    "code": "SI056",
+    "macro_category": "Sintomi",
+    "label_it": "Ingestione di corpo estraneo",
+    "label_en": "Foreign body ingestion",
+    "triage_depth": "Media",
+    "completion_status": "1-Da rivedere a cura MM prima revisione",
+    "short_definition": "Il bambino viene visto mettere in bocca e deglutire un oggetto non alimentare. Possono essere osservati residui di saliva sull'oggetto mancante o gesti come toccarsi la gola o la bocca subito dopo l'ingestione."
+  },
+  {
+    "code": "SI057",
+    "macro_category": "Sintomi",
+    "label_it": "Ittero",
+    "label_en": "Jaundice",
+    "triage_depth": "Media",
+    "completion_status": "1-Da rivedere a cura MM prima revisione",
+    "short_definition": "La pelle e il bianco degli occhi del bambino appaiono di colore giallastro in modo uniforme o più evidente alla luce naturale. Il cambiamento di colore è visibile soprattutto sul volto e nella parte superiore del corpo."
+  },
+  {
+    "code": "SI058",
+    "macro_category": "Sintomi",
+    "label_it": "Lacrimazione eccessiva",
+    "label_en": "Excessive tearing",
+    "triage_depth": "Media",
+    "completion_status": "1-Da rivedere a cura MM prima revisione",
+    "short_definition": "Gli occhi del bambino appaiono costantemente bagnati, con lacrime che scorrono sulle guance anche in assenza di pianto. Può essere necessario asciugarli spesso."
+  },
+  {
+    "code": "SI059",
+    "macro_category": "Sintomi",
+    "label_it": "Morso o puntura di zecca",
+    "label_en": "Tick bite or sting",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Sulla pelle del bambino si vede una piccola zecca attaccata, spesso come un puntino scuro o brunastro aderente alla cute. Nella zona può essere presente un lieve arrossamento circolare attorno al punto in cui l'animale è fissato."
+  },
+  {
+    "code": "SI060",
+    "macro_category": "Sintomi",
+    "label_it": "Pediculosi o infestazione da parassiti cutanei",
+    "label_en": "Lice or skin parasite infestation",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Sul cuoio capelluto o sulla pelle del bambino si possono osservare piccoli puntini scuri in movimento o minuscole uova chiare attaccate ai capelli o ai peli. Il bambino può grattarsi con frequenza la zona interessata."
+  },
+  {
+    "code": "SI061",
+    "macro_category": "Sintomi",
+    "label_it": "Prurito cutaneo diffuso",
+    "label_en": "Diffuse skin itching",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino si gratta spesso in diverse parti del corpo, passando le unghie o le mani sulla pelle in modo ripetuto. Possono essere visibili segni da grattamento o movimenti continui nel tentativo di alleviare il fastidio."
+  },
+  {
+    "code": "SI062",
+    "macro_category": "Sintomi",
+    "label_it": "Punture di insetti",
+    "label_en": "Insect bites",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Sulla pelle del bambino compaiono piccoli punti arrossati o leggermente rilevati, spesso con un centro più chiaro. Il bambino può toccare o grattare la zona e le punture possono essere visibili singolarmente o in piccoli gruppi."
+  },
+  {
+    "code": "SI063",
+    "macro_category": "Sintomi",
+    "label_it": "Sangue nelle feci",
+    "label_en": "Blood in stool",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Nelle feci del bambino si osservano tracce di colore rosso vivo, striature rosse sulla superficie o macchie rosate sulla carta igienica. Il colore può essere visibile anche nell'acqua del water dopo la defecazione."
+  },
+  {
+    "code": "SI064",
+    "macro_category": "Sintomi",
+    "label_it": "Sangue nelle urine",
+    "label_en": "Blood in urine",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "L'urina del bambino appare di colore rosato, rosso o con piccole tracce scure simili a filamenti o macchioline. Il cambiamento di colore è visibile nel vasino, nel water o sul pannolino."
+  },
+  {
+    "code": "SI065",
+    "macro_category": "Sintomi",
+    "label_it": "Terrore notturno",
+    "label_en": "Sleep terrors",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino urla improvvisamente mentre dorme, con occhi semichiusi o sguardo assente, muovendosi in modo agitato nel letto. Può dimenarsi, sedersi o respirare affannosamente senza dare segnali di essere pienamente sveglio."
+  },
+  {
+    "code": "SI066",
+    "macro_category": "Sintomi",
+    "label_it": "Sonniloquio",
+    "label_en": "Sleep talking",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino parla nel sonno emettendo parole, frasi o suoni comprensibili senza essere realmente sveglio. Può sembrare che stia conversando o borbottando, ma al risveglio di solito non ricorda nulla."
+  },
+  {
+    "code": "SI067",
+    "macro_category": "Sintomi",
+    "label_it": "Risvegli confusionali",
+    "label_en": "Confusional awakenings",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino si sveglia improvvisamente durante la notte disorientato e confuso, può piangere o parlare in modo incoerente e fatica a calmarsi. Dopo l'episodio si riaddormenta senza ricordare quanto accaduto."
+  },
+  {
+    "code": "SI068",
+    "macro_category": "Sintomi",
+    "label_it": "Patereccio",
+    "label_en": "Nail biting",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il dito, vicino all'unghia, appare arrossato, gonfio e dolente al tatto. La pelle può essere tesa e calda, talvolta con presenza di pus o una piccola raccolta biancastra sotto la cute. Il bambino può evitare di usare quel dito o reagire quando viene sfiorato."
+  },
+  {
+    "code": "SI069",
+    "macro_category": "Sintomi",
+    "label_it": "Onicomadesi",
+    "label_en": "Onychomadesis",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "L'unghia del bambino inizia a staccarsi parzialmente o completamente dalla base, spesso dopo alcuni giorni o settimane da una malattia o un'infezione. Si nota una linea di separazione o una parte dell'unghia che si solleva."
+  },
+  {
+    "code": "SI070",
+    "macro_category": "Sintomi",
+    "label_it": "Micosi dell'unghia",
+    "label_en": "Nail fungal infection",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "L'unghia appare ispessita, opaca o di colore alterato, spesso giallastro, biancastro o brunastro. La superficie può diventare irregolare o friabile e l'unghia può sfaldarsi ai bordi. Il cambiamento è progressivo e interessa una o più unghie."
+  },
+  {
+    "code": "SI071",
+    "macro_category": "Sintomi",
+    "label_it": "Alterazione cromatica dell'unghia",
+    "label_en": "Changes in nail color",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "L'unghia del bambino cambia colore rispetto al normale, diventando più scura, giallastra, biancastra o con macchie evidenti. Il cambiamento può coinvolgere tutta l'unghia o solo una parte, ed è visibile a occhio nudo anche senza dolore."
+  },
+  {
+    "code": "SI072",
+    "macro_category": "Sintomi",
+    "label_it": "Feci molto chiare",
+    "label_en": "Pale stools",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Le feci del bambino appaiono insolitamente pallide, quasi bianche o color argilla, invece del normale colore marrone. Il cambiamento è evidente nel pannolino, nel vasino o nel water e può persistere per più evacuazioni consecutive."
+  },
+  {
+    "code": "SI073",
+    "macro_category": "Sintomi",
+    "label_it": "Pronazione dolorosa dell'avambraccio",
+    "label_en": "Nursemaid's elbow",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino improvvisamente smette di usare un braccio dopo una trazione o un movimento brusco, tenendolo lungo il corpo leggermente piegato. Evita di muoverlo o di afferrare oggetti e può piangere se si prova a ruotare o sollevare l'avambraccio."
+  },
+  {
+    "code": "SI074",
+    "macro_category": "Sintomi",
+    "label_it": "Problematiche dell'ombelico",
+    "label_en": "Umbilical disorders",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Si notano cambiamenti nell'ombelico del bambino come arrossamento, gonfiore, secrezioni o cattivo odore, oppure dolore quando viene toccato."
+  },
+  {
+    "code": "SI075",
+    "macro_category": "Sintomi",
+    "label_it": "Ustione o Scottatura solare",
+    "label_en": "Burn or sunburn",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "La pelle del bambino appare arrossata e calda dopo esposizione al sole o a una fonte di calore, con dolore al tatto e possibile comparsa di vescicole."
+  },
+  {
+    "code": "SI076",
+    "macro_category": "Sintomi",
+    "label_it": "Problematiche del pene",
+    "label_en": "Penile disorders",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il bambino presenta arrossamento, gonfiore, dolore o secrezioni a livello del pene, oppure fastidio durante pipì o quando l'area viene toccata."
+  },
+  {
+    "code": "SI077",
+    "macro_category": "Sintomi",
+    "label_it": "Gonfiore improvviso di volto o labbra",
+    "label_en": "Facial swelling",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il viso del bambino, le labbra o una guancia si gonfiano in poco tempo rispetto al normale, con un cambiamento di forma evidente. La pelle può apparire più tesa e il gonfiore può interessare anche le palpebre."
+  },
+  {
+    "code": "SI078",
+    "macro_category": "Sintomi",
+    "label_it": "Ferita o taglio",
+    "label_en": "Wound or cut",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Sulla pelle del bambino è presente un taglio o una ferita aperta, con possibile fuoriuscita di sangue o pelle separata ai bordi. La zona può essere dolente, arrossata o sporca se la ferita è avvenuta durante il gioco o una caduta."
+  },
+  {
+    "code": "SI079",
+    "macro_category": "Sintomi",
+    "label_it": "Trauma arto con gonfiore o deformità",
+    "label_en": "Limb trauma with swelling or deformity",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Dopo una caduta o un urto, un braccio o una gamba appaiono gonfi oppure con una forma insolita rispetto all altro lato. Il bambino può evitare di muovere o usare quella parte, oppure mostrare dolore quando prova ad appoggiarla."
+  },
+  {
+    "code": "SI080",
+    "macro_category": "Sintomi",
+    "label_it": "Segni di sviluppo puberale anticipato",
+    "label_en": "Early pubertal signs",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il genitore nota nel bambino o nella bambina la comparsa di segni di sviluppo puberale prima del previsto per l'età, come sanguinamento vaginale o mestruazioni, comparsa di peli pubici o ascellari, sviluppo del seno, odore corporeo più intenso o rapida maturazione del corpo."
+  },
+  {
+    "code": "SI081",
+    "macro_category": "Sintomi",
+    "label_it": "",
+    "label_en": "",
+    "triage_depth": "",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "",
+    "macro_category": "",
+    "label_it": "Da valutare di inserire nelle GCCC previa validazione dei contenuti da parte dei pediatri, e magari concludendo, dopo la spiegazione fatta dall'agente, con la richiesta al genitore se desidera approfondire la cosa con il pediatra.",
+    "label_en": "",
+    "triage_depth": "",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "",
+    "macro_category": "",
+    "label_it": "Feci molli",
+    "label_en": "",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Le feci del bambino appaiono più morbide e poco formate rispetto al solito, con una consistenza che può risultare pastosa o semiliquida. Nel pannolino, nel vasino o nel water mantengono una forma meno definita del normale."
+  },
+  {
+    "code": "",
+    "macro_category": "",
+    "label_it": "Erezioni frequenti",
+    "label_en": "",
+    "triage_depth": "Media",
+    "completion_status": "",
+    "short_definition": "Il pene del bambino appare rigido più volte nell'arco della giornata o durante il cambio del pannolino. L'erezione è visibile come un irrigidimento temporaneo, anche in momenti di calma o senza stimoli evidenti."
+  },
+  {
+    "code": "AR001",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Informazioni su una diagnosi",
+    "label_en": "",
+    "triage_depth": "Apertura caso per info su diagnosi: invio preliminare dell'esito della visita e Michele poi decide outcome in base alla complessità della situazione.",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR002",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Vaccini - chiamata attiva",
+    "label_en": "",
+    "triage_depth": "Messaggi di massa inviati a un certo panel filtrato (sulla base di parametri) dei pazienti dei pazienti del pediatra per fare un vaccino - Ai bambini che hanno esenzioni per patologia cronica ovvero sono fragili questi panel devono poterli includere (da prevedere nel profilo del bambino il campo esenzione per reddito o per patologia oppure importarlo in automatico dal file che Michele si scarica dalla ASL)",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR003",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta nuovo farmaco - Ricetta medica",
+    "label_en": "",
+    "triage_depth": "Lo UP apre caso compilando il nome del farmaco, il motivo per cui lo richiede e il numero di confezioni (non so, 1, 2, ...) - Il dottore riceve e gestisce la richiesta",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR004",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta certificato (1: certificato medico malattia bambino per assenza dal lavoro, 2: certificato per attività sportiva, 3: certificato dieta alimentare scolastica, 4: certificato astensione attività motoria, 5: rientro dopo malattia- Per elenco completo fare una ricerca nel sito della regione Umbria e alcuni me li invia Michele)",
+    "label_en": "",
+    "triage_depth": "Lo UP apre ticket per richiesta certificato specificando il tipo di certificato richiesto (Gloria se li mappa tutti con Michele e MAttia) e fornisce eventuali info e docs necessari allo UD e/o allo UP stesso (Es. certificato per lo sport costa 30 euro..... info da app al paziente - Elettrocardiogramma disponibile? Domande e info da app a UP ecc...) - Lo UD riceve la richiesta e risponde fissando un appuntamento, eventualmente integrando la richiesta con altre domande via chat ecc...",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR005",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta ricetta medica",
+    "label_en": "",
+    "triage_depth": "Lo UP apre caso compilando il nome del farmaco, il motivo per cui lo richiede e il numero di confezioni (non so, 1, 2, ...) Tipo di ricette richiedibili (Farmaco, visita specialistica, Esame di laboratorio, ricetta bianca per le prestazioni in fascia C farmaci o prestazioni non in SSN)- Il dottore riceve e gestisce la richiesta",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR006",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Invio documenti al pediatra",
+    "label_en": "",
+    "triage_depth": "Es. Referto, analisi di laboratorio, esami diagnostici,...",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR007",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta bilancio di salute",
+    "label_en": "",
+    "triage_depth": "UP richiede e app filtra in base alle finestre e all'età del paziente",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR008",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta di visita (per patologia cronica, altri motivi non gestibili dal BOT)",
+    "label_en": "",
+    "triage_depth": "Lo UP deve poter specificare la sua richiesta in un messaggio da inviare al pediatrica - ATTENZIONE A NON RENDERLA troppo facile perché altrimenti gli UP la usano per bypassare il BOT",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR009",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta di ricette per visita specialistica",
+    "label_en": "",
+    "triage_depth": "Rientra in AM002 ovvero richiesta ricetta medica",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR010",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Richiesta vaccino - prenotazione di un vaccino",
+    "label_en": "",
+    "triage_depth": "Gli facciamo specificare quale vaccino vorrebbero fare e in base a questa selezione proponiamo il consenso informato idoneo da compilare e firmare entrambi i genitori PRIMA di recarsi all'appuntamento per il vaccino. (proposta diretta dello slot quando avremo il calendario integrato!!) poi passiamo il ticket al pediatra e il pediatra se lo gestisce.",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR011",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Cancellazione di un appuntamento",
+    "label_en": "",
+    "triage_depth": "Già previsto nel progetto dell'agenda",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR012",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Spostamento di un appuntamento",
+    "label_en": "",
+    "triage_depth": "Già previsto nel progetto dell'agenda",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "AR013",
+    "macro_category": "Altre richieste per UD",
+    "label_it": "Prenotazione esame diagnostico (Es. Tampone, stick urine etc)",
+    "label_en": "",
+    "triage_depth": "Lo UP deve prenotare compilando una richiesta e rispondendo a una serie di domande - Verificare come mai abbiamo eliminato il tampone per lo streptococco in base ai criteri di McIsac e reinserirli nei casi che rientrano decisamente in queste casistiche perché farebbe risparmiare molto tempo al pediatra!!",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "Ambiti di addestramento dell'Agente",
+    "macro_category": "",
+    "label_it": "",
+    "label_en": "",
+    "triage_depth": "",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI001",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Assunzione farmaci durante allattamento",
+    "label_en": "",
+    "triage_depth": "Michele li rinvia tutti al numero verde dei farmaci per l'allattamento 888 33 00",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI002",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Informazioni su un farmaco",
+    "label_en": "",
+    "triage_depth": "Li rinviamo al sito dell'AIFA https://medicinali.aifa.gov.it/it/#/it/",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI005",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Vaccini - informazioni",
+    "label_en": "",
+    "triage_depth": "https://www.vaccinarsi.org/",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI006",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Interazioni farmacologiche",
+    "label_en": "",
+    "triage_depth": "Per lo UP possiamo mandare un riferimento a questo sito: https://www.torrinomedica.it/interazioni-farmaci/ - Per lo UD: Il database dell'AIFA a cui attingono i vari sistemi gestionali in qualche modo ha embedded queste compatibilità e se il pediatra prescrive due farmaci con potenziali effetti contrastanti il sistema lo segnala. - Proviamo a chiedere ad AIFA quale è la fonte più autorevole a cui possiamo attingere.",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI008",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Allergie/Intolleranze",
+    "label_en": "",
+    "triage_depth": "Addestriamo l'agente a rispondere a domande generiche sul tema, previo addestramento con idoneo materiale da parte dei pediatri",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI009",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "Informazioni su reazioni allergiche",
+    "label_en": "",
+    "triage_depth": "Addestriamo l'agente a rispondere a domande generiche sul tema delle alergie andando a addestrarlo sulla base delle 5 macro categorie di allergie che abbiamo identificato e inserito nel profilo del bambino",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "CI010",
+    "macro_category": "Consigli e informazioni generali",
+    "label_it": "",
+    "label_en": "",
+    "triage_depth": "",
+    "completion_status": "",
+    "short_definition": ""
+  },
+  {
+    "code": "fine",
+    "macro_category": "fine",
+    "label_it": "fine",
+    "label_en": "fine",
+    "triage_depth": "fine",
+    "completion_status": "fine",
+    "short_definition": ""
+  }
+]

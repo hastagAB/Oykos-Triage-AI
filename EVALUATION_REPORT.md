@@ -250,3 +250,66 @@ All corrections were applied via `scripts/fix_gold_labels.py` with documented re
 ### 9.4 Reproducibility
 
 Results may vary slightly between runs due to GPT-5.5's lack of `temperature=0` support. The evaluation script, test dataset, and gold labels are versioned for reproducibility. Full results are stored in `data/test/eval_v4_final.json`.
+
+---
+
+## 10. Model Comparison
+
+All models evaluated on the same 860-case test dataset, same prompt, same corrected gold labels. Baseline mode (single LLM call, no retrieval pipeline).
+
+### 10.1 OpenAI Models
+
+| Model | Micro F1 | Precision | Recall | Symptoms at F1=1.0 | Below Recall Floor | Eval Time |
+|-------|----------|-----------|--------|--------------------|--------------------|-----------|
+| **GPT-5.5** | **0.9564** | **0.9393** | **0.9938** | **44 / 80** | **1** | ~8 min |
+| GPT-5.4 | 0.9374 | 0.9238 | 0.9858 | 44 / 80 | 4 | ~4 min |
+| GPT-5.4-mini | 0.9173 | 0.8962 | 0.9787 | 31 / 80 | 3 | ~3 min |
+| GPT-5.4-nano | 0.8660 | 0.8572 | 0.9180 | 17 / 80 | 13 | ~2.5 min |
+
+### 10.2 Analysis by Model Tier
+
+**GPT-5.5 (recommended for production)**
+- Highest F1, highest recall (99.4%), only 1 symptom below recall floor
+- 100% accuracy on negation, past-resolved, and real user messages
+- Main weakness: over-extracts consequence symptoms (16 FPs)
+- Cost: higher per-token, but cached catalog means only ~200 fresh input tokens per message
+
+**GPT-5.4 (viable alternative)**
+- 2 percentage points below 5.5 in F1, but 2x faster
+- 4 symptoms below recall floor vs 1 for 5.5
+- Main weaknesses: struggles with sleep disorder disambiguation (Risvegli confusionali, Insonnia), over-extracts Irrequietezza/pianto inconsolabile
+- 100% on negation and past-resolved
+
+**GPT-5.4-mini (budget option, use with caution)**
+- 4 points below 5.5 in F1, precision drops below 90%
+- Starts confusing adjacent sleep disorders and nail conditions
+- Still 97.9% recall — misses are rare but FPs increase
+- Acceptable for non-clinical use or as a pre-filter
+
+**GPT-5.4-nano (not recommended)**
+- 9 points below 5.5 in F1, 13 symptoms below recall floor
+- Critical failures: Sonnambulismo 42% recall, Terrore notturno 44%, Ingestione corpo estraneo 25%
+- Negation accuracy drops to 97.5% (2 failures out of 80)
+- **Not safe for clinical triage** — too many missed symptoms on rare conditions
+
+### 10.3 Key Observations
+
+1. **Recall degrades gracefully, precision degrades steeply**: Smaller models maintain reasonable recall (92%+) but produce many more false positives, suggesting they struggle with disambiguation rather than detection.
+
+2. **Sleep disorders are the hardest category**: All models struggle to distinguish Sonnambulismo, Risvegli confusionali, Terrore notturno, and Risvegli notturni — these overlap significantly in symptom descriptions.
+
+3. **Negation handling is robust across all models**: Even nano achieves 97.5% on negation cases. The explicit negation markers in Italian (non, niente, senza, mai) are straightforward for all model tiers.
+
+4. **The cost/accuracy sweet spot is GPT-5.4**: At half the cost and latency of 5.5, it delivers 93.7% F1 — a 2-point drop that may be acceptable depending on the deployment context.
+
+### 10.4 Running Your Own Comparison
+
+```bash
+# Evaluate any model
+python cli.py evaluate --provider openai --model gpt-5.5 --output results/gpt55.json
+python cli.py evaluate --provider anthropic --model claude-sonnet-4-20250514 --output results/claude.json
+python cli.py evaluate --provider gemini --model gemini-2.5-flash --output results/gemini.json
+
+# Compare all results
+python scripts/compare_results.py
+```

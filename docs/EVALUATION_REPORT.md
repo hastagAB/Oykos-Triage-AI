@@ -19,6 +19,7 @@ That's the accuracy: **correct messages / total messages**.
 |---|---|---|---|
 | **GPT-5.5** (OpenAI, flagship) | **839 / 860** | 21 | **97.6%** |
 | **Claude Sonnet 4.6** (Anthropic) | 826 / 860 | 34 | 96.0% |
+| **Claude Opus 4** (Anthropic, flagship) | 823 / 860 | 37 | 95.7% |
 | GPT-5.4 (OpenAI, fast) | 803 / 860 | 57 | 93.4% |
 | GPT-5.4 Mini (OpenAI, budget) | 781 / 860 | 79 | 90.8% |
 | GPT-5.4 Nano (OpenAI, cheapest) | 717 / 860 | 143 | 83.4% |
@@ -77,7 +78,7 @@ Usable for non-clinical applications. Not recommended where accuracy is critical
 
 ### Claude Sonnet 4.6 — 96.0% accurate (826 / 860 correct)
 
-Strong result. Only 13 fewer correct messages than GPT-5.5 across 860 tests.
+Best Anthropic model. Notably, it **outperforms the larger Opus 4** despite being a smaller model.
 
 **34 mistakes:**
 - 20 times: added an extra symptom
@@ -86,24 +87,39 @@ Strong result. Only 13 fewer correct messages than GPT-5.5 across 860 tests.
 
 The mistakes it makes are similar in nature to GPT-5.5 — mostly borderline cases where two symptoms look alike (e.g. "nail discoloration" vs "nail fungus", "skin lesions" vs "insect bites").
 
-**Recommendation:** Safe for production. Best choice if you want to avoid depending on a single provider.
+**Recommendation:** Best Anthropic model. Safe for clinical use. Good choice if you want to avoid depending on a single provider.
+
+---
+
+### Claude Opus 4 — 95.7% accurate (823 / 860 correct)
+
+Anthropic's flagship model, but it scores slightly below Sonnet 4.6 on this task.
+
+**37 mistakes:**
+- 18 times: missed a symptom (more misses than Sonnet)
+- 17 times: added an extra symptom
+- 2 times: both missed one and added one wrong
+
+Notable weakness: struggles with seizure descriptions — missed "Convulsioni" (seizures) in 2 cases where the parent described the episode indirectly ("scatti ripetuti e irrigidimento", "scatti strani e non rispondeva").
+
+**Recommendation:** Usable but Sonnet 4.6 is the better Anthropic choice for this task.
 
 ---
 
 ## What Both Top Models Get Right
 
 - **Negations (100%):** When a parent says *"non ha la febbre"* (he does NOT have a fever), both models correctly ignore that symptom every single time.
-- **Real production messages (100%):** Tested on 19 actual WhatsApp messages from parents — both models were perfect.
+- **Real production messages (100%):** Tested on 19 actual WhatsApp messages from parents — both GPT-5.5 and Claude Sonnet were perfect.
 - **Multi-symptom messages:** Both handle messages with 2–3 symptoms cleanly.
 
 ---
 
 ## Common Mistake Pattern
 
-The most frequent error across all models (and both providers) is **over-extraction** — the model finds a symptom that IS genuinely described in the message but is caused by the main symptom rather than being an independent concern.
+The most frequent error across all models is **over-extraction** — the model finds a symptom that IS genuinely described in the message but is caused by the main symptom rather than being an independent concern.
 
-Example: *"ha un dolore fortissimo al dente e non riesce a dormire"* (terrible toothache and can't sleep)  
-Expected: **Dental pain**  
+Example: *"ha un dolore fortissimo al dente e non riesce a dormire"* (terrible toothache and can't sleep)
+Expected: **Dental pain**
 Wrong answer: **Dental pain + Insomnia** ← the insomnia is caused by the pain, not a separate symptom
 
 This is the hardest problem to fix because the symptom IS present in the text — the model just needs to understand that it's a consequence, not an independent complaint.
@@ -115,11 +131,13 @@ This is the hardest problem to fix because the symptom IS present in the text �
 | Use case | Recommended model |
 |---|---|
 | Production triage | GPT-5.5 (OpenAI) |
-| Provider independence | Claude Sonnet 4.6 (Anthropic) |
+| Provider independence / Anthropic | Claude Sonnet 4.6 |
 | Cost-saving fallback | GPT-5.4 (OpenAI) |
 | Avoid entirely | GPT-5.4 Nano |
 
 GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 out of 860 tests — a 1.6 percentage point gap. Both are safe for clinical use.
+
+Surprisingly, **Claude Opus 4 scores lower than Sonnet 4.6** on this task (95.7% vs 96.0%). Bigger is not always better — Sonnet 4.6 is the better Anthropic choice here.
 
 ---
 
@@ -129,6 +147,7 @@ GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 out of 860
 # Re-run evaluation for any model
 python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-sonnet-4-6 --output data/eval/results.json
+python cli.py evaluate --provider anthropic --model claude-opus-4-8 --output data/eval/results.json
 
 # Show comparison across all saved results
 python scripts/compare_results.py

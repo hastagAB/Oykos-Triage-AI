@@ -13,6 +13,9 @@ from .base import LLMProvider, LLMResponse, LLMUsage
 
 logger = logging.getLogger(__name__)
 
+# Models that do not accept the temperature parameter
+_NO_TEMPERATURE_MODELS = {"claude-opus-4-8", "claude-opus-4-5"}
+
 
 class AnthropicProvider(LLMProvider):
     def __init__(self, api_key: str, default_model: str = "claude-sonnet-4-20250514"):
@@ -55,15 +58,18 @@ class AnthropicProvider(LLMProvider):
         if cache_system_prompt:
             system_blocks[0]["cache_control"] = {"type": "ephemeral"}
 
-        response = await self._client.messages.create(
+        kwargs = dict(
             model=model,
             max_tokens=4096,
-            temperature=temperature,
             system=system_blocks,
             tools=tools,
             tool_choice={"type": "tool", "name": tool_name},
             messages=[{"role": "user", "content": user_message}],
         )
+        if model not in _NO_TEMPERATURE_MODELS:
+            kwargs["temperature"] = temperature
+
+        response = await self._client.messages.create(**kwargs)
 
         usage = LLMUsage(
             input_tokens=response.usage.input_tokens,
@@ -101,13 +107,16 @@ class AnthropicProvider(LLMProvider):
     ) -> LLMResponse:
         model = model or self._default_model
 
-        response = await self._client.messages.create(
+        kwargs = dict(
             model=model,
             max_tokens=max_tokens,
-            temperature=temperature,
             system=system_prompt,
             messages=[{"role": "user", "content": user_message}],
         )
+        if model not in _NO_TEMPERATURE_MODELS:
+            kwargs["temperature"] = temperature
+
+        response = await self._client.messages.create(**kwargs)
 
         usage = LLMUsage(
             input_tokens=response.usage.input_tokens,

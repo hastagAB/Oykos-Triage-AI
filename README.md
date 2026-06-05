@@ -35,7 +35,7 @@ python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --max-cases 
 | Provider | Models | Install |
 |----------|--------|---------|
 | OpenAI | gpt-5.5-2026-04-23, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `pip install -e ".[openai]"` |
-| Anthropic | claude-sonnet-4-6, claude-opus-4-8, claude-3-5-haiku | `pip install -e ".[anthropic]"` |
+| Anthropic | claude-sonnet-4-6, claude-sonnet-4-5, claude-opus-4-8, claude-opus-4-6, claude-opus-4-5 | `pip install -e ".[anthropic]"` |
 | Google | gemini-2.5-flash, gemini-2.5-pro | `pip install -e ".[gemini]"` |
 
 Switch providers with a flag — no code changes:
@@ -100,7 +100,10 @@ Scored on 860 Italian parent messages. A message is **correct** only if every sy
 |-------|---------|----------|
 | GPT-5.5 (OpenAI) | 839 / 860 | **97.6%** |
 | Claude Sonnet 4.6 (Anthropic) | 826 / 860 | 96.0% |
-| Claude Opus 4 (Anthropic) | 823 / 860 | 95.7% |
+| Claude Opus 4.8 (Anthropic) | 823 / 860 | 95.7% |
+| Claude Opus 4.5 (Anthropic) | 821 / 860 | 95.5% |
+| Claude Sonnet 4.5 (Anthropic) | 815 / 860 | 94.8% |
+| Claude Opus 4.6 (Anthropic) | 805 / 860 | 93.6% |
 | GPT-5.4 (OpenAI) | 803 / 860 | 93.4% |
 | GPT-5.4 Mini (OpenAI) | 781 / 860 | 90.8% |
 | GPT-5.4 Nano (OpenAI) | 717 / 860 | 83.4% |

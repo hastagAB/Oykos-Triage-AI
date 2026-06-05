@@ -14,7 +14,7 @@ from .base import LLMProvider, LLMResponse, LLMUsage
 logger = logging.getLogger(__name__)
 
 # Models that do not accept the temperature parameter
-_NO_TEMPERATURE_MODELS = {"claude-opus-4-8", "claude-opus-4-5"}
+_NO_TEMPERATURE_MODELS = {"claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-opus-4-5"}
 
 
 class AnthropicProvider(LLMProvider):

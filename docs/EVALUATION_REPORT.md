@@ -18,8 +18,11 @@ That's the accuracy: **correct messages / total messages**.
 | Model | Correct | Wrong | Accuracy |
 |---|---|---|---|
 | **GPT-5.5** (OpenAI, flagship) | **839 / 860** | 21 | **97.6%** |
-| **Claude Sonnet 4.6** (Anthropic) | 826 / 860 | 34 | 96.0% |
-| **Claude Opus 4** (Anthropic, flagship) | 823 / 860 | 37 | 95.7% |
+| **Claude Sonnet 4.6** (Anthropic, latest) | 826 / 860 | 34 | 96.0% |
+| **Claude Opus 4.8** (Anthropic, flagship) | 823 / 860 | 37 | 95.7% |
+| Claude Opus 4.5 (Anthropic) | 821 / 860 | 39 | 95.5% |
+| Claude Sonnet 4.5 (Anthropic) | 815 / 860 | 45 | 94.8% |
+| Claude Opus 4.6 (Anthropic) | 805 / 860 | 55 | 93.6% |
 | GPT-5.4 (OpenAI, fast) | 803 / 860 | 57 | 93.4% |
 | GPT-5.4 Mini (OpenAI, budget) | 781 / 860 | 79 | 90.8% |
 | GPT-5.4 Nano (OpenAI, cheapest) | 717 / 860 | 143 | 83.4% |
@@ -78,7 +81,7 @@ Usable for non-clinical applications. Not recommended where accuracy is critical
 
 ### Claude Sonnet 4.6 — 96.0% accurate (826 / 860 correct)
 
-Best Anthropic model. Notably, it **outperforms the larger Opus 4** despite being a smaller model.
+Best Anthropic model. Notably, it **outperforms every Opus model** despite being a smaller model.
 
 **34 mistakes:**
 - 20 times: added an extra symptom
@@ -91,18 +94,65 @@ The mistakes it makes are similar in nature to GPT-5.5 — mostly borderline cas
 
 ---
 
-### Claude Opus 4 — 95.7% accurate (823 / 860 correct)
+### Claude Opus 4.8 — 95.7% accurate (823 / 860 correct)
 
-Anthropic's flagship model, but it scores slightly below Sonnet 4.6 on this task.
+Anthropic's current flagship model.
 
 **37 mistakes:**
-- 18 times: missed a symptom (more misses than Sonnet)
+- 18 times: missed a symptom (more misses than Sonnet 4.6)
 - 17 times: added an extra symptom
 - 2 times: both missed one and added one wrong
 
 Notable weakness: struggles with seizure descriptions — missed "Convulsioni" (seizures) in 2 cases where the parent described the episode indirectly ("scatti ripetuti e irrigidimento", "scatti strani e non rispondeva").
 
 **Recommendation:** Usable but Sonnet 4.6 is the better Anthropic choice for this task.
+
+---
+
+### Claude Opus 4.5 — 95.5% accurate (821 / 860 correct)
+
+**39 mistakes:**
+- 24 times: added an extra symptom
+- 11 times: missed a symptom
+- 4 times: both missed one and added one wrong
+
+Slightly behind Opus 4.8. Sonnet 4.6 remains the top Anthropic model.
+
+---
+
+### Claude Sonnet 4.5 — 94.8% accurate (815 / 860 correct)
+
+**45 mistakes:**
+- 21 times: added an extra symptom
+- 20 times: missed a symptom (notably more misses than Sonnet 4.6)
+- 4 times: both missed one and added one wrong
+
+Weaker than Sonnet 4.6 on missed symptoms — the newer Sonnet generation meaningfully improved recall.
+
+---
+
+### Claude Opus 4.6 — 93.6% accurate (805 / 860 correct)
+
+**55 mistakes:**
+- 43 times: added an extra symptom (highest over-extraction in Anthropic lineup)
+- 10 times: missed a symptom
+- 2 times: both missed one and added one wrong
+
+This model over-extracts more than the others. Not the recommended Anthropic choice.
+
+---
+
+## Anthropic Model Ranking (Summary)
+
+A notable pattern across the Anthropic lineup: **Sonnet beats Opus at every generation**. Bigger is not better for this task.
+
+| Model | Accuracy | Notes |
+|---|---|---|
+| Sonnet 4.6 | **96.0%** | Best Anthropic — use this |
+| Opus 4.8 | 95.7% | Flagship but 3 more errors than Sonnet 4.6 |
+| Opus 4.5 | 95.5% | Similar to Opus 4.8 |
+| Sonnet 4.5 | 94.8% | Sonnet 4.6 is better in every way |
+| Opus 4.6 | 93.6% | Over-extracts the most |
 
 ---
 
@@ -137,7 +187,7 @@ This is the hardest problem to fix because the symptom IS present in the text �
 
 GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 out of 860 tests — a 1.6 percentage point gap. Both are safe for clinical use.
 
-Surprisingly, **Claude Opus 4 scores lower than Sonnet 4.6** on this task (95.7% vs 96.0%). Bigger is not always better — Sonnet 4.6 is the better Anthropic choice here.
+Within the Anthropic lineup, **Sonnet 4.6 is the clear winner** — it outperforms every Opus variant despite being a smaller, faster, cheaper model.
 
 ---
 
@@ -148,6 +198,9 @@ Surprisingly, **Claude Opus 4 scores lower than Sonnet 4.6** on this task (95.7%
 python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-sonnet-4-6 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-opus-4-8 --output data/eval/results.json
+python cli.py evaluate --provider anthropic --model claude-opus-4-5 --output data/eval/results.json
+python cli.py evaluate --provider anthropic --model claude-sonnet-4-5 --output data/eval/results.json
+python cli.py evaluate --provider anthropic --model claude-opus-4-6 --output data/eval/results.json
 
 # Show comparison across all saved results
 python scripts/compare_results.py

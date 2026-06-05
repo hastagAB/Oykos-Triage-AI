@@ -15,17 +15,29 @@ ROOT = Path(__file__).resolve().parent.parent
 EVAL_DIR = ROOT / "data" / "eval"
 
 MODEL_LABELS = {
-    "gpt-5.5-2026-04-23":       "GPT-5.5           (OpenAI, flagship)",
-    "gpt-5.4":                  "GPT-5.4            (OpenAI, fast)",
-    "gpt-5.4-mini":             "GPT-5.4 Mini       (OpenAI, budget)",
-    "gpt-5.4-nano":             "GPT-5.4 Nano       (OpenAI, cheapest)",
-    "claude-sonnet-4-6":        "Claude Sonnet 4.6  (Anthropic)",
-    "claude-sonnet-4-20250514": "Claude Sonnet 4    (Anthropic)",
-    "claude-opus-4-8":          "Claude Opus 4      (Anthropic, flagship)",
+    # OpenAI
+    "gpt-5.5-2026-04-23":       "GPT-5.5            (OpenAI, flagship)",
+    "gpt-5.4":                  "GPT-5.4             (OpenAI, fast)",
+    "gpt-5.4-mini":             "GPT-5.4 Mini        (OpenAI, budget)",
+    "gpt-5.4-nano":             "GPT-5.4 Nano        (OpenAI, cheapest)",
+    # Anthropic — Sonnet line
+    "claude-sonnet-4-6":        "Claude Sonnet 4.6   (Anthropic, latest)",
+    "claude-sonnet-4-5":        "Claude Sonnet 4.5   (Anthropic)",
+    "claude-sonnet-4-20250514": "Claude Sonnet 4     (Anthropic)",
+    # Anthropic — Opus line
+    "claude-opus-4-8":          "Claude Opus 4.8     (Anthropic, flagship)",
+    "claude-opus-4-6":          "Claude Opus 4.6     (Anthropic)",
+    "claude-opus-4-5":          "Claude Opus 4.5     (Anthropic)",
 }
 
+# Skip intermediate experiment runs (prompt regression, catalog-only test)
+EXCLUDED_FILES = {"eval_v5_gpt55.json", "eval_v5_catalog_only.json"}
+
 OPENAI_MODELS = {"gpt-5.5-2026-04-23", "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano"}
-ANTHROPIC_MODELS = {"claude-sonnet-4-6", "claude-sonnet-4-20250514", "claude-opus-4-8"}
+ANTHROPIC_MODELS = {
+    "claude-sonnet-4-6", "claude-sonnet-4-5", "claude-sonnet-4-20250514",
+    "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-opus-4-5",
+}
 
 
 def label(model_id):
@@ -82,13 +94,23 @@ def load_all():
     if not files:
         print("No evaluation files found in data/eval/")
         sys.exit(1)
-    results = []
+    # Collect all valid results, then deduplicate keeping best run per model
+    all_results = []
     for f in files:
+        if f.name in EXCLUDED_FILES:
+            continue
         try:
-            r = analyse(f.name)
-            results.append(r)
+            all_results.append(analyse(f.name))
         except Exception as e:
             print(f"  Warning: could not read {f.name}: {e}")
+
+    # Keep the highest-accuracy result per model
+    best_per_model = {}
+    for r in all_results:
+        mid = r["model_id"]
+        if mid not in best_per_model or r["correct"] > best_per_model[mid]["correct"]:
+            best_per_model[mid] = r
+    results = list(best_per_model.values())
     results.sort(key=lambda r: r["correct"], reverse=True)
     return results
 

@@ -36,7 +36,7 @@ Why this is often enough with current models:
 - An explicit negation instruction plus a required `evidence_span` per label forces grounding, which suppresses false positives.
 - Prompt caching on the static catalog makes the per-message cost low after the first call.
 
-Ship this, evaluate it on the held-out fine-tuning test set, and measure per-symptom F1. Only move to the full pipeline for the symptoms that fall below threshold.
+Ship this, evaluate it on the held-out test set, and measure per-message accuracy. Only move to the full pipeline for the symptoms that are causing misses.
 
 ### 3.2 The full pipeline (add only where the baseline fails)
 
@@ -230,11 +230,11 @@ Mine the catalog from your existing fine-tuning data. Each labeled example is a 
 
 ## 6. Evaluation
 
-Aggregate F1 hides rare-symptom collapse. The fine-tuned model's advantage was uniform performance across the full list, so that is what to reproduce and measure.
+Score each message as binary correct/wrong: correct only if the model got every symptom exactly right — nothing missed, nothing added. This matches the clinical requirement: a single missed symptom is a failed triage.
 
-- Report macro-F1 and per-symptom recall and precision.
-- Stratify the eval set by symptom frequency, with a dedicated rare-symptom slice.
-- Set a hard floor, for example recall at least 0.85 on every symptom with at least 20 support examples.
+- Report accuracy (correct messages / total messages) as the primary metric.
+- Stratify by case type: single-symptom, multi-symptom, negation, past-resolved.
+- Track false negatives (missed symptoms) separately from false positives (extra symptoms) — in a clinical setting, misses are more dangerous than noise.
 - Build the regression set from the existing fine-tuning data so it maps directly to the previous baseline.
 
 ## 7. Where to add or remove complexity
@@ -259,6 +259,6 @@ If the dataset is large and clinical safety is paramount, run the pipeline above
 
 1. Build the catalog YAML from the fine-tuning data.
 2. Ship the single-call baseline with prompt caching.
-3. Run it on the stratified test set, get per-symptom F1.
-4. For each symptom below the floor: catalog fix, then prompt fix, then pipeline addition, in that order.
+3. Run it on the stratified test set, measure per-message accuracy.
+4. For each symptom causing misses: catalog fix, then prompt fix, then pipeline addition, in that order.
 5. Add Stage 2 retrieval and Stages 1, 3, 5 only for the slices the baseline cannot cover.

@@ -169,7 +169,7 @@ python cli.py evaluate --max-cases 50
 python cli.py evaluate --output results/my_evaluation.json
 
 # Compare providers
-python cli.py evaluate --provider anthropic --model claude-sonnet-4-20250514
-python cli.py evaluate --provider openai --model gpt-4o
+python cli.py evaluate --provider anthropic --model claude-sonnet-4-6
+python cli.py evaluate --provider anthropic --model claude-opus-4-8
 python cli.py evaluate --provider gemini --model gemini-2.5-flash
 ```

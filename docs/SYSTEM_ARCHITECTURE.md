@@ -1,4 +1,4 @@
-# System Architecture: Pediatric Symptom Extraction MVP
+# System Architecture: Pediatric Symptom Extraction
 
 ## 1. Problem Statement
 
@@ -10,7 +10,7 @@ The system must handle colloquial Italian text (WhatsApp-style), detect negation
 
 ## 2. Architecture Overview
 
-The MVP uses a **single-call baseline architecture**: one LLM call with the full 80-symptom catalog embedded in a cached system prompt, combined with structured output (JSON schema with enum constraints) to mechanically prevent hallucinated labels.
+The system uses a **single-call baseline architecture**: one LLM call with the full 80-symptom catalog embedded in a cached system prompt, combined with structured output (JSON schema with enum constraints) to mechanically prevent hallucinated labels.
 
 ```
 Parent Message (Italian)
@@ -41,7 +41,7 @@ Parent Message (Italian)
   Structured JSON Output
 ```
 
-A full 5-stage pipeline (clause segmentation, parallel retrieval, RRF fusion, constrained extraction, confidence gating) is also implemented but not required for the baseline which already achieves 95.6% F1.
+A full 5-stage pipeline (clause segmentation, parallel retrieval, RRF fusion, constrained extraction, confidence gating) is also implemented but not required for the baseline which already achieves 97.6% accuracy (839/860 messages correct with GPT-5.5).
 
 ---
 
@@ -266,7 +266,7 @@ openai:
   cheap_model: gpt-4o-mini
 
 anthropic:
-  frontier_model: claude-sonnet-4-20250514
+  frontier_model: claude-sonnet-4-6
   cheap_model: claude-3-5-haiku-20241022
 
 pipeline:

@@ -27,6 +27,7 @@ data/cache/
 
 # Evaluation results (generated, not source)
 data/eval/eval_*.json
+data/eval/*_log.txt
 
 # Legacy data directory (migrated to data/catalog + data/eval)
 data/test/

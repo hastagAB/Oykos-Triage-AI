@@ -1,6 +1,6 @@
 # Oykos Triage AI
 
-Pediatric symptom extraction from Italian parent messages using base LLMs. Replaces a fine-tuned model with a prompt-based system that achieves **95.6% F1** with **99.4% recall** across 80 symptoms.
+Pediatric symptom extraction from Italian parent messages using base LLMs. Replaces a fine-tuned model with a prompt-based system that achieves **97.6% accuracy** across 860 test cases (GPT-5.5), with zero hallucinated labels.
 
 ## How It Works
 
@@ -24,25 +24,25 @@ cp .env.example .env
 # Edit .env with your key
 
 # 3. Extract symptoms
-python cli.py extract "Mio figlio ha la febbre e tossisce" --provider openai --model gpt-4o
+python cli.py extract "Mio figlio ha la febbre e tossisce" --provider openai --model gpt-5.5-2026-04-23
 
 # 4. Run evaluation
-python cli.py evaluate --provider openai --model gpt-4o --max-cases 50
+python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --max-cases 50
 ```
 
 ## Supported Providers
 
 | Provider | Models | Install |
 |----------|--------|---------|
-| OpenAI | gpt-4o, gpt-4.1, gpt-5.5-2026-04-23 | `pip install -e ".[openai]"` |
-| Anthropic | claude-sonnet-4-20250514, claude-3-5-haiku | `pip install -e ".[anthropic]"` |
+| OpenAI | gpt-5.5-2026-04-23, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `pip install -e ".[openai]"` |
+| Anthropic | claude-sonnet-4-6, claude-opus-4-8, claude-3-5-haiku | `pip install -e ".[anthropic]"` |
 | Google | gemini-2.5-flash, gemini-2.5-pro | `pip install -e ".[gemini]"` |
 
 Switch providers with a flag — no code changes:
 
 ```bash
-python cli.py extract "Febbre alta" --provider openai --model gpt-4o
-python cli.py extract "Febbre alta" --provider anthropic --model claude-sonnet-4-20250514
+python cli.py extract "Febbre alta" --provider openai --model gpt-5.5-2026-04-23
+python cli.py extract "Febbre alta" --provider anthropic --model claude-sonnet-4-6
 python cli.py extract "Febbre alta" --provider gemini --model gemini-2.5-flash
 ```
 
@@ -50,10 +50,10 @@ python cli.py extract "Febbre alta" --provider gemini --model gemini-2.5-flash
 
 ```bash
 # Extract symptoms from a message
-python cli.py extract "message" --provider openai --model gpt-4o [--verbose]
+python cli.py extract "message" --provider openai --model gpt-5.5-2026-04-23 [--verbose]
 
 # Run evaluation on test dataset (860 cases)
-python cli.py evaluate --provider openai --model gpt-4o [--max-cases N] [--output results.json]
+python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 [--max-cases N] [--output results.json]
 
 # Filter evaluation by case type
 python cli.py evaluate --case-types positive,negation
@@ -92,19 +92,22 @@ python cli.py build-index
 }
 ```
 
-## Evaluation Results (GPT-5.5)
+## Evaluation Results
 
-| Metric | Value |
-|--------|-------|
-| Micro F1 | 0.956 |
-| Micro Precision | 0.939 |
-| Micro Recall | 0.994 |
-| Negation accuracy | 100% |
-| Past-resolved accuracy | 100% |
-| Real user messages | 100% |
-| Symptoms at perfect F1 | 44/80 |
+Scored on 860 Italian parent messages. A message is **correct** only if every symptom is extracted exactly — nothing missed, nothing added.
 
-See [EVALUATION_REPORT.md](EVALUATION_REPORT.md) for full results.
+| Model | Correct | Accuracy |
+|-------|---------|----------|
+| GPT-5.5 (OpenAI) | 839 / 860 | **97.6%** |
+| Claude Sonnet 4.6 (Anthropic) | 826 / 860 | 96.0% |
+| Claude Opus 4 (Anthropic) | 823 / 860 | 95.7% |
+| GPT-5.4 (OpenAI) | 803 / 860 | 93.4% |
+| GPT-5.4 Mini (OpenAI) | 781 / 860 | 90.8% |
+| GPT-5.4 Nano (OpenAI) | 717 / 860 | 83.4% |
+
+Negation accuracy: **100%** — models correctly ignore negated symptoms ("non ha la febbre") every time.
+
+See [EVALUATION_REPORT.md](docs/EVALUATION_REPORT.md) for full results and per-model error analysis.
 
 ## Project Structure
 
@@ -166,7 +169,7 @@ Or with explicit control:
 from symptom_extraction import load_config, load_catalog, OpenAIProvider, PipelineOrchestrator
 
 config = load_config()
-provider = OpenAIProvider(api_key="sk-...", default_model="gpt-4o")
+provider = OpenAIProvider(api_key="sk-...", default_model="gpt-5.5-2026-04-23")
 catalog = load_catalog()
 pipeline = PipelineOrchestrator(config, provider, catalog)
 

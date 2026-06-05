@@ -26,7 +26,10 @@ data/cache/
 *.npz
 
 # Evaluation results (generated, not source)
-data/test/eval_*.json
+data/eval/eval_*.json
+
+# Legacy data directory (migrated to data/catalog + data/eval)
+data/test/
 
 # Backup files
 *.bak

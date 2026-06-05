@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-files = list((ROOT / "data" / "test").glob("eval_*.json"))
+files = list((ROOT / "data" / "eval").glob("eval_*.json"))
 if not files:
     print("No evaluation files found.")
     sys.exit(1)

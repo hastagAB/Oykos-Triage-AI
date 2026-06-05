@@ -8,14 +8,15 @@ import json
 from collections import Counter
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from synthetic_cases import all_records
 
-ROOT = Path(__file__).resolve().parent
-OUT_DIR = ROOT / "data" / "test"
-CATALOG_PATH = OUT_DIR / "symptom_catalog.json"
-DATASET_PATH = OUT_DIR / "test_dataset.jsonl"
-CSV_PATH = OUT_DIR / "test_dataset.csv"
-STATS_PATH = OUT_DIR / "test_dataset_stats.md"
+ROOT = Path(__file__).resolve().parent.parent
+CATALOG_PATH = ROOT / "data" / "catalog" / "symptom_catalog.json"
+DATASET_PATH = ROOT / "data" / "eval" / "test_dataset.jsonl"
+CSV_PATH = ROOT / "data" / "eval" / "test_dataset.csv"
+STATS_PATH = ROOT / "data" / "eval" / "test_dataset_stats.md"
 
 
 def load_existing() -> list[dict]:

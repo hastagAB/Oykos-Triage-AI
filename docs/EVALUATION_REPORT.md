@@ -237,7 +237,7 @@ During the first evaluation run, we identified 49 gold label errors in the test 
 - Gold labels expected symptoms not clearly described in the message (6 cases)
 - Symptom label encoding issues (Zoppia vs Zoppia accent) (13 cases)
 
-All corrections were applied via `scripts/fix_gold_labels.py` with documented reasoning per case. The original dataset is preserved in `data/test/test_dataset.jsonl.bak`.
+All corrections were applied via `scripts/fix_gold_labels.py` with documented reasoning per case. The original dataset is preserved in `data/eval/test_dataset.jsonl.bak`.
 
 ### 9.3 Metrics
 
@@ -249,7 +249,7 @@ All corrections were applied via `scripts/fix_gold_labels.py` with documented re
 
 ### 9.4 Reproducibility
 
-Results may vary slightly between runs due to GPT-5.5's lack of `temperature=0` support. The evaluation script, test dataset, and gold labels are versioned for reproducibility. Full results are stored in `data/test/eval_v4_final.json`.
+Results may vary slightly between runs due to GPT-5.5's lack of `temperature=0` support. The evaluation script, test dataset, and gold labels are versioned for reproducibility. Full results are stored in `data/eval/eval_v4_final.json`.
 
 ---
 

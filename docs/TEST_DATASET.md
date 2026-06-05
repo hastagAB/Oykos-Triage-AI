@@ -14,7 +14,7 @@
 | **Past-resolved cases** | 40 |
 | **Average message length** | 81 characters |
 | **Language** | Italian (colloquial, WhatsApp-style) |
-| **File** | `data/test/test_dataset.jsonl` |
+| **File** | `data/eval/test_dataset.jsonl` |
 
 ---
 
@@ -128,7 +128,7 @@ Each record in `test_dataset.jsonl` has the following fields:
 
 49 gold labels were corrected after the initial evaluation revealed under-annotation. The principle: if a message genuinely describes a symptom, it belongs in the gold set regardless of which symptom the test case was "designed" to test.
 
-Corrections are documented in `scripts/fix_gold_labels.py` with per-case reasoning. The original dataset is preserved as `data/test/test_dataset.jsonl.bak`.
+Corrections are documented in `scripts/fix_gold_labels.py` with per-case reasoning. The original dataset is preserved as `data/eval/test_dataset.jsonl.bak`.
 
 **Common correction types:**
 - Messages describing co-occurring symptoms (e.g., "russa e il respiro si ferma" — both Russamento and Apnee are present)
@@ -139,7 +139,7 @@ Corrections are documented in `scripts/fix_gold_labels.py` with per-case reasoni
 
 ## Symptom Catalog
 
-The canonical symptom list contains 80 symptoms (SI001-SI080), stored in `data/test/symptom_catalog.json`.
+The canonical symptom list contains 80 symptoms (SI001-SI080), stored in `data/catalog/symptom_catalog.json`.
 
 Each symptom has:
 - **code**: SI001-SI080
@@ -157,7 +157,7 @@ Medium-priority (Media) symptoms: 44 — these may require routine consultation.
 
 ```bash
 # Full evaluation (all 861 cases)
-python cli.py evaluate --dataset data/test/test_dataset.jsonl --provider openai --model gpt-5.5-2026-04-23
+python cli.py evaluate --dataset data/eval/test_dataset.jsonl --provider openai --model gpt-5.5-2026-04-23
 
 # Subset by case type
 python cli.py evaluate --case-types positive,negation

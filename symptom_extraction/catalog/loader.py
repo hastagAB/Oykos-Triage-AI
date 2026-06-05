@@ -8,7 +8,7 @@ from pathlib import Path
 from ..models import EnrichedSymptom
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-DEFAULT_CATALOG = ROOT / "data" / "test" / "symptom_catalog.json"
+DEFAULT_CATALOG = ROOT / "data" / "catalog" / "symptom_catalog.json"
 ENRICHED_CATALOG = ROOT / "symptom_extraction" / "catalog" / "enriched_catalog.json"
 
 

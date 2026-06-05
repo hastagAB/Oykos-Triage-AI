@@ -83,7 +83,7 @@ def extract(message, provider, model, mode, config_path, verbose):
 
 
 @cli.command()
-@click.option("--dataset", type=click.Path(exists=True), default="data/test/test_dataset.jsonl")
+@click.option("--dataset", type=click.Path(exists=True), default="data/eval/test_dataset.jsonl")
 @click.option("--provider", type=click.Choice(PROVIDERS), default=None, help="LLM provider")
 @click.option("--model", default=None, help="Model name (e.g., gpt-4o, claude-sonnet-4-20250514, gemini-2.5-flash)")
 @click.option("--mode", type=click.Choice(["baseline", "pipeline"]), default=None)

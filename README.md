@@ -109,14 +109,15 @@ See [EVALUATION_REPORT.md](EVALUATION_REPORT.md) for full results.
 ## Project Structure
 
 ```
-symptom_extraction/         # Main package
+symptom_extraction/         # Core package
+  __init__.py               # Public API (OykosExtractor, models, providers)
   config.py                 # Configuration loader
   models.py                 # Pydantic models (shared types)
   llm/                      # Provider-agnostic LLM layer
     base.py                 #   Abstract interface
-    openai_provider.py      #   OpenAI (gpt-4o, gpt-5.5, etc.)
-    anthropic_provider.py   #   Anthropic (claude-sonnet, etc.)
-    gemini_provider.py      #   Google (gemini-2.5-flash, etc.)
+    openai_provider.py      #   OpenAI
+    anthropic_provider.py   #   Anthropic
+    gemini_provider.py      #   Google Gemini
   catalog/                  # Symptom catalog management
     loader.py               #   Load & validate catalog
     enrich.py               #   LLM-based enrichment
@@ -138,17 +139,31 @@ symptom_extraction/         # Main package
 
 cli.py                      # CLI entry point
 config.yaml                 # Default configuration
-data/test/                  # Test dataset (861 cases)
+data/
+  catalog/                  # Runtime symptom catalog (80 symptoms)
+  eval/                     # Evaluation dataset (861 cases)
+docs/                       # Architecture & evaluation docs
+scripts/                    # Dev/data pipeline scripts
 ```
 
 ## Integration
 
 ```python
 import asyncio
-from symptom_extraction.config import load_config, get_api_key
-from symptom_extraction.catalog.loader import load_catalog
-from symptom_extraction.llm.openai_provider import OpenAIProvider
-from symptom_extraction.pipeline.orchestrator import PipelineOrchestrator
+from symptom_extraction import OykosExtractor
+
+# Auto-configures provider from config.yaml + .env
+extractor = OykosExtractor.from_config()
+result = asyncio.run(extractor.extract("Mio figlio ha la febbre"))
+
+for symptom in result.confirmed:
+    print(f"{symptom.code} {symptom.label_it}: {symptom.evidence_span}")
+```
+
+Or with explicit control:
+
+```python
+from symptom_extraction import load_config, load_catalog, OpenAIProvider, PipelineOrchestrator
 
 config = load_config()
 provider = OpenAIProvider(api_key="sk-...", default_model="gpt-4o")
@@ -156,12 +171,10 @@ catalog = load_catalog()
 pipeline = PipelineOrchestrator(config, provider, catalog)
 
 result = asyncio.run(pipeline.run("Mio figlio ha la febbre"))
-for symptom in result.confirmed:
-    print(f"{symptom.code} {symptom.label_it}: {symptom.evidence_span}")
 ```
 
 ## Documentation
 
-- [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) — Full architecture, input/output specs, design decisions
-- [EVALUATION_REPORT.md](EVALUATION_REPORT.md) — Detailed evaluation results and error analysis
-- [TEST_DATASET.md](TEST_DATASET.md) — Test dataset structure, sources, and methodology
+- [SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) — Full architecture, input/output specs, design decisions
+- [EVALUATION_REPORT.md](docs/EVALUATION_REPORT.md) — Detailed evaluation results and error analysis
+- [TEST_DATASET.md](docs/TEST_DATASET.md) — Test dataset structure, sources, and methodology

@@ -11,8 +11,8 @@ from pathlib import Path
 from copy import deepcopy
 
 ROOT = Path(__file__).resolve().parent.parent
-DATASET = ROOT / "data" / "test" / "test_dataset.jsonl"
-BACKUP = ROOT / "data" / "test" / "test_dataset.jsonl.bak"
+DATASET = ROOT / "data" / "eval" / "test_dataset.jsonl"
+BACKUP = ROOT / "data" / "eval" / "test_dataset.jsonl.bak"
 
 # -----------------------------------------------------------------------
 # CORRECTIONS: case_id -> new expected_symptoms_canonical

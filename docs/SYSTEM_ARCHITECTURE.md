@@ -77,7 +77,7 @@ male la pancia. La tosse di settimana scorsa per fortuna e passata."
 - `triage_depth`: Alta (high) or Media (medium)
 - `short_definition`: Clinical definition in Italian
 
-Source file: `data/test/symptom_catalog.json`
+Source file: `data/catalog/symptom_catalog.json`
 
 ---
 

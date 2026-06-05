@@ -176,7 +176,7 @@ class EvaluationRunner:
 
     async def run_dataset(
         self,
-        dataset_path: str | Path = "data/test/test_dataset.jsonl",
+        dataset_path: str | Path = "data/eval/test_dataset.jsonl",
         max_cases: int | None = None,
         case_types: list[str] | None = None,
     ) -> EvaluationReport:

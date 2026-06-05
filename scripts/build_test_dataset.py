@@ -32,11 +32,13 @@ from docx import Document
 # --------------------------------------------------------------------------- #
 # Paths
 # --------------------------------------------------------------------------- #
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 XLSX = ROOT / "Assistente pediatrico - Master.xlsx"
 DOCX = ROOT / "Domande per testare Agente.docx"
-OUT_DIR = ROOT / "data" / "test"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
+CATALOG_OUT = ROOT / "data" / "catalog"
+EVAL_OUT = ROOT / "data" / "eval"
+CATALOG_OUT.mkdir(parents=True, exist_ok=True)
+EVAL_OUT.mkdir(parents=True, exist_ok=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -363,21 +365,15 @@ def main() -> None:
     report = validate(cases, symptoms)
 
     # Write artifacts ------------------------------------------------------- #
-    (OUT_DIR / "symptom_catalog.json").write_text(
+    (CATALOG_OUT / "symptom_catalog.json").write_text(
         json.dumps(symptoms, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    (OUT_DIR / "domain_catalog.json").write_text(
-        json.dumps(domains, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    (OUT_DIR / "all_categories.json").write_text(
-        json.dumps(all_cats, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
 
-    with (OUT_DIR / "test_dataset.jsonl").open("w", encoding="utf-8") as f:
+    with (EVAL_OUT / "test_dataset.jsonl").open("w", encoding="utf-8") as f:
         for c in cases:
             f.write(json.dumps(c, ensure_ascii=False) + "\n")
 
-    with (OUT_DIR / "test_dataset.csv").open("w", encoding="utf-8", newline="") as f:
+    with (EVAL_OUT / "test_dataset.csv").open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow([
             "id", "source", "section", "message",
@@ -429,11 +425,12 @@ def main() -> None:
         for lbl, n in sorted(report["unknown_labels"].items(), key=lambda x: -x[1]):
             lines.append(f"- {lbl}  (x{n})")
 
-    (OUT_DIR / "test_dataset_stats.md").write_text("\n".join(lines), encoding="utf-8")
+    (EVAL_OUT / "test_dataset_stats.md").write_text("\n".join(lines), encoding="utf-8")
 
     print("\nWrote:")
-    for p in OUT_DIR.iterdir():
-        print(f"  {p.relative_to(ROOT)}  ({p.stat().st_size:,} bytes)")
+    for d in (CATALOG_OUT, EVAL_OUT):
+        for p in d.iterdir():
+            print(f"  {p.relative_to(ROOT)}  ({p.stat().st_size:,} bytes)")
 
 
 if __name__ == "__main__":

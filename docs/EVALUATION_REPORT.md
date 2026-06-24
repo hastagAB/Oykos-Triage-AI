@@ -1,6 +1,6 @@
 # Oykos Triage AI — Model Evaluation Report
 
-**Date:** June 5, 2026
+**Date:** June 24, 2026
 **Test dataset:** 860 Italian parent messages, covering 80 pediatric symptoms
 
 ---
@@ -20,12 +20,16 @@ That's the accuracy: **correct messages / total messages**.
 | **GPT-5.5** (OpenAI, flagship) | **839 / 860** | 21 | **97.6%** |
 | **Claude Sonnet 4.6** (Anthropic, latest) | 826 / 860 | 34 | 96.0% |
 | **Claude Opus 4.8** (Anthropic, flagship) | 823 / 860 | 37 | 95.7% |
+| **Gemini 2.5 Flash** (Google) | 822 / 860 | 38 | 95.6% |
 | Claude Opus 4.5 (Anthropic) | 821 / 860 | 39 | 95.5% |
 | Claude Sonnet 4.5 (Anthropic) | 815 / 860 | 45 | 94.8% |
+| Gemini 2.5 Pro (Google) | 807 / 860 | 53 | 93.8% |
+| Gemini 3.5 Flash (Google, latest) | 807 / 860 | 53 | 93.8% |
 | Claude Opus 4.6 (Anthropic) | 805 / 860 | 55 | 93.6% |
 | GPT-5.4 (OpenAI, fast) | 803 / 860 | 57 | 93.4% |
 | GPT-5.4 Mini (OpenAI, budget) | 781 / 860 | 79 | 90.8% |
 | GPT-5.4 Nano (OpenAI, cheapest) | 717 / 860 | 143 | 83.4% |
+| Gemini 3.1 Pro (Google, flagship) | 334 / 860 | 526 | 38.8% |
 
 ---
 
@@ -156,6 +160,70 @@ A notable pattern across the Anthropic lineup: **Sonnet beats Opus at every gene
 
 ---
 
+## Google Gemini Models
+
+### Gemini 2.5 Flash — 95.6% accurate (822 / 860 correct)
+
+Best Gemini model. Competitive with Claude Opus 4.8 and Opus 4.5.
+
+**38 mistakes:**
+- 21 times: missed a symptom
+- 15 times: added an extra symptom
+- 2 times: both missed one and added one wrong
+
+Notably more balanced between misses and false alarms compared to most other models (which tend to over-extract). Strong recall (Macro Recall 0.976) with 42 out of 80 symptoms scoring perfect F1.
+
+**Recommendation:** Best Gemini choice. Viable third-provider option alongside OpenAI and Anthropic.
+
+---
+
+### Gemini 2.5 Pro — 93.8% accurate (807 / 860 correct)
+
+**53 mistakes:**
+- 38 times: added an extra symptom
+- 13 times: missed a symptom
+- 2 times: both missed one and added one wrong
+
+More expensive than 2.5 Flash but less accurate — the Pro model over-extracts more. No reason to prefer it over 2.5 Flash.
+
+---
+
+### Gemini 3.5 Flash — 93.8% accurate (807 / 860 correct)
+
+Google's latest Flash model. Same accuracy as 2.5 Pro but with a different error profile.
+
+**53 mistakes:**
+- 42 times: added an extra symptom (highest over-extraction of all Gemini models)
+- 9 times: missed a symptom
+- 2 times: both missed one and added one wrong
+
+The newer Flash generation actually regressed vs 2.5 Flash — more prone to over-extraction (e.g. flagging "Irrequietezza" from any mention of restless behavior).
+
+---
+
+### Gemini 3.1 Pro — 38.8% accurate (334 / 860 correct)
+
+**Not usable.** Missed symptoms in 515 out of 860 cases (Macro Recall 0.31).
+
+This model has a structured output issue — it frequently returns empty or incomplete results despite understanding the input. Precision is reasonable (0.81) when it does produce output, but it fails silently on the majority of cases.
+
+**Not recommended for any use.**
+
+---
+
+## Gemini Model Ranking (Summary)
+
+An unexpected result: **the older 2.5 Flash model beats all newer Gemini models** on this task. Neither the Pro tier nor the newer 3.x generation improved accuracy.
+
+| Model | Accuracy | Notes |
+|---|---|---|
+| Gemini 2.5 Flash | **95.6%** | Best Gemini — use this |
+| Gemini 2.5 Pro | 93.8% | Pro tier doesn't help |
+| Gemini 3.5 Flash | 93.8% | Latest but over-extracts more |
+| Gemini 3.1 Pro | 38.8% | Broken structured output — avoid |
+
+---
+
 ## What Both Top Models Get Right
 
 - **Negations (100%):** When a parent says *"non ha la febbre"* (he does NOT have a fever), both models correctly ignore that symptom every single time.
@@ -182,12 +250,15 @@ This is the hardest problem to fix because the symptom IS present in the text �
 |---|---|
 | Production triage | GPT-5.5 (OpenAI) |
 | Provider independence / Anthropic | Claude Sonnet 4.6 |
+| Provider independence / Google | Gemini 2.5 Flash |
 | Cost-saving fallback | GPT-5.4 (OpenAI) |
-| Avoid entirely | GPT-5.4 Nano |
+| Avoid entirely | GPT-5.4 Nano, Gemini 3.1 Pro |
 
-GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 out of 860 tests — a 1.6 percentage point gap. Both are safe for clinical use.
+GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 and **17 more** than Gemini 2.5 Flash out of 860 tests. All three are safe for clinical use.
 
 Within the Anthropic lineup, **Sonnet 4.6 is the clear winner** — it outperforms every Opus variant despite being a smaller, faster, cheaper model.
+
+Within the Gemini lineup, **2.5 Flash is the clear winner** — newer and more expensive models all performed worse on this task.
 
 ---
 
@@ -201,6 +272,10 @@ python cli.py evaluate --provider anthropic --model claude-opus-4-8 --output dat
 python cli.py evaluate --provider anthropic --model claude-opus-4-5 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-sonnet-4-5 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-opus-4-6 --output data/eval/results.json
+python cli.py evaluate --provider gemini --model gemini-2.5-flash --output data/eval/results.json
+python cli.py evaluate --provider gemini --model gemini-2.5-pro --output data/eval/results.json
+python cli.py evaluate --provider gemini --model gemini-3.5-flash --output data/eval/results.json
+python cli.py evaluate --provider gemini --model gemini-3.1-pro-preview --output data/eval/results.json
 
 # Show comparison across all saved results
 python scripts/compare_results.py

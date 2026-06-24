@@ -28,6 +28,11 @@ MODEL_LABELS = {
     "claude-opus-4-8":          "Claude Opus 4.8     (Anthropic, flagship)",
     "claude-opus-4-6":          "Claude Opus 4.6     (Anthropic)",
     "claude-opus-4-5":          "Claude Opus 4.5     (Anthropic)",
+    # Google Gemini
+    "gemini-3.5-flash":         "Gemini 3.5 Flash    (Google, latest)",
+    "gemini-3.1-pro-preview":   "Gemini 3.1 Pro      (Google, flagship)",
+    "gemini-2.5-pro":           "Gemini 2.5 Pro      (Google)",
+    "gemini-2.5-flash":         "Gemini 2.5 Flash    (Google)",
 }
 
 # Skip intermediate experiment runs (prompt regression, catalog-only test)
@@ -37,6 +42,10 @@ OPENAI_MODELS = {"gpt-5.5-2026-04-23", "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano"
 ANTHROPIC_MODELS = {
     "claude-sonnet-4-6", "claude-sonnet-4-5", "claude-sonnet-4-20250514",
     "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-opus-4-5",
+}
+GEMINI_MODELS = {
+    "gemini-3.5-flash", "gemini-3.1-pro-preview",
+    "gemini-2.5-pro", "gemini-2.5-flash",
 }
 
 
@@ -152,10 +161,12 @@ def print_model_card(r, rank):
 def main():
     results = load_all()
 
-    # Split into OpenAI and Anthropic
+    # Split by provider
     openai_results = [r for r in results if r["model_id"] in OPENAI_MODELS]
     anthropic_results = [r for r in results if r["model_id"] in ANTHROPIC_MODELS]
-    other_results = [r for r in results if r["model_id"] not in OPENAI_MODELS and r["model_id"] not in ANTHROPIC_MODELS]
+    gemini_results = [r for r in results if r["model_id"] in GEMINI_MODELS]
+    known = OPENAI_MODELS | ANTHROPIC_MODELS | GEMINI_MODELS
+    other_results = [r for r in results if r["model_id"] not in known]
 
     total = results[0]["total"] if results else 860
 
@@ -183,6 +194,15 @@ def main():
         print("  ANTHROPIC MODELS")
         print("=" * 70)
         for i, r in enumerate(anthropic_results):
+            print("-" * 70)
+            print_model_card(r, i)
+
+    # ── Google Gemini ─────────────────────────────────────────────────────
+    if gemini_results:
+        print("=" * 70)
+        print("  GOOGLE GEMINI MODELS")
+        print("=" * 70)
+        for i, r in enumerate(gemini_results):
             print("-" * 70)
             print_model_card(r, i)
 
@@ -215,27 +235,35 @@ def main():
     print("  RECOMMENDATION")
     print("=" * 70)
     print()
+    providers = []
     if openai_results:
         best_oa = openai_results[0]
+        providers.append(("OpenAI", best_oa))
         print(f"  Best OpenAI model   : {best_oa['label'].strip()}")
         print(f"                        {best_oa['correct']} / {best_oa['total']} correct ({pct(best_oa['correct'], best_oa['total'])})")
         print()
     if anthropic_results:
         best_an = anthropic_results[0]
+        providers.append(("Anthropic", best_an))
         print(f"  Best Anthropic model: {best_an['label'].strip()}")
         print(f"                        {best_an['correct']} / {best_an['total']} correct ({pct(best_an['correct'], best_an['total'])})")
         print()
+    if gemini_results:
+        best_ge = gemini_results[0]
+        providers.append(("Gemini", best_ge))
+        print(f"  Best Gemini model   : {best_ge['label'].strip()}")
+        print(f"                        {best_ge['correct']} / {best_ge['total']} correct ({pct(best_ge['correct'], best_ge['total'])})")
+        print()
 
-    if openai_results and anthropic_results:
-        best_oa = openai_results[0]
-        best_an = anthropic_results[0]
-        diff = best_oa["correct"] - best_an["correct"]
+    if len(providers) >= 2:
+        providers.sort(key=lambda p: p[1]["correct"], reverse=True)
+        best_name, best = providers[0]
+        second_name, second = providers[1]
+        diff = best["correct"] - second["correct"]
         if diff > 0:
-            print(f"  GPT-5.5 handles {diff} more messages correctly than Claude Sonnet 4.6.")
-        elif diff < 0:
-            print(f"  Claude Sonnet 4.6 handles {-diff} more messages correctly than GPT-5.5.")
+            print(f"  {best['label'].strip()} handles {diff} more messages correctly than {second['label'].strip()}.")
         else:
-            print(f"  Both top models are equally accurate.")
+            print(f"  Top models from {best_name} and {second_name} are equally accurate.")
         print()
     print()
 

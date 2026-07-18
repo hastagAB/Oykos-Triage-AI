@@ -17,6 +17,9 @@ EVAL_DIR = ROOT / "data" / "eval"
 MODEL_LABELS = {
     # OpenAI
     "gpt-5.5-2026-04-23":       "GPT-5.5            (OpenAI, flagship)",
+    "gpt-5.6-sol":              "GPT-5.6 Sol         (OpenAI, flagship)",
+    "gpt-5.6-terra":            "GPT-5.6 Terra       (OpenAI, balanced)",
+    "gpt-5.6-luna":             "GPT-5.6 Luna        (OpenAI, fast)",
     "gpt-5.4":                  "GPT-5.4             (OpenAI, fast)",
     "gpt-5.4-mini":             "GPT-5.4 Mini        (OpenAI, budget)",
     "gpt-5.4-nano":             "GPT-5.4 Nano        (OpenAI, cheapest)",
@@ -38,7 +41,10 @@ MODEL_LABELS = {
 # Skip intermediate experiment runs (prompt regression, catalog-only test)
 EXCLUDED_FILES = {"eval_v5_gpt55.json", "eval_v5_catalog_only.json"}
 
-OPENAI_MODELS = {"gpt-5.5-2026-04-23", "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano"}
+OPENAI_MODELS = {
+    "gpt-5.5-2026-04-23", "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna",
+    "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano",
+}
 ANTHROPIC_MODELS = {
     "claude-sonnet-4-6", "claude-sonnet-4-5", "claude-sonnet-4-20250514",
     "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-opus-4-5",

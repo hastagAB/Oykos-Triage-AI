@@ -18,11 +18,13 @@ That's the accuracy: **correct messages / total messages**.
 | Model | Correct | Wrong | Accuracy |
 |---|---|---|---|
 | **GPT-5.5** (OpenAI, flagship) | **839 / 860** | 21 | **97.6%** |
+| GPT-5.6 Sol (OpenAI, flagship) | 828 / 860 | 32 | 96.3% |
 | **Claude Sonnet 4.6** (Anthropic, latest) | 826 / 860 | 34 | 96.0% |
 | **Claude Opus 4.8** (Anthropic, flagship) | 823 / 860 | 37 | 95.7% |
 | **Gemini 2.5 Flash** (Google) | 822 / 860 | 38 | 95.6% |
 | Claude Opus 4.5 (Anthropic) | 821 / 860 | 39 | 95.5% |
 | Claude Sonnet 4.5 (Anthropic) | 815 / 860 | 45 | 94.8% |
+| GPT-5.6 Terra (OpenAI, balanced) | 811 / 860 | 49 | 94.3% |
 | Gemini 2.5 Pro (Google) | 807 / 860 | 53 | 93.8% |
 | Gemini 3.5 Flash (Google, latest) | 807 / 860 | 53 | 93.8% |
 | Claude Opus 4.6 (Anthropic) | 805 / 860 | 55 | 93.6% |
@@ -30,6 +32,9 @@ That's the accuracy: **correct messages / total messages**.
 | GPT-5.4 Mini (OpenAI, budget) | 781 / 860 | 79 | 90.8% |
 | GPT-5.4 Nano (OpenAI, cheapest) | 717 / 860 | 143 | 83.4% |
 | Gemini 3.1 Pro (Google, flagship) | 334 / 860 | 526 | 38.8% |
+| GPT-5.6 Luna (OpenAI, fast) | *pending* | — | — |
+
+> GPT-5.6 Luna evaluation stopped partway through (49% complete) due to an OpenAI API quota/billing limit (`insufficient_quota`). Re-run once billing is topped up: `python cli.py evaluate --provider openai --model gpt-5.6-luna --concurrency 10 --output data/eval/eval_gpt56luna.json`
 
 ---
 
@@ -44,6 +49,42 @@ Best overall. Gets 97.6% of messages exactly right.
 - 5 times: missed a symptom entirely
 
 **Recommendation:** Best choice for production.
+
+---
+
+### GPT-5.6 Sol — 96.3% accurate (828 / 860 correct)
+
+Flagship tier of the 5.6 family. Slightly behind GPT-5.5 on this dataset.
+
+**32 mistakes:**
+- 22 times: found all the right symptoms but also added an extra one
+- 9 times: missed a symptom entirely
+- 1 time: both missed one and added one wrong
+
+**Recommendation:** Solid alternative to GPT-5.5; keep GPT-5.5 as the primary choice until 5.6 Sol closes the gap.
+
+---
+
+### GPT-5.6 Terra — 94.3% accurate (811 / 860 correct)
+
+Balanced tier of the 5.6 family, positioned between Sol and GPT-5.4.
+
+**49 mistakes:**
+- 33 times: found everything but added an extra symptom
+- 13 times: missed a symptom
+- 3 times: both missed one and added one wrong
+
+**Recommendation:** Usable as a mid-cost option, but GPT-5.6 Sol and GPT-5.5 remain preferable where accuracy matters.
+
+---
+
+### GPT-5.6 Luna — evaluation incomplete
+
+The evaluation run stopped at 423/860 cases (49%) after the OpenAI account returned `insufficient_quota` (HTTP 429) errors. No aggregate score is available yet. Re-run once billing is resolved:
+
+```bash
+python cli.py evaluate --provider openai --model gpt-5.6-luna --concurrency 10 --output data/eval/eval_gpt56luna.json
+```
 
 ---
 
@@ -251,7 +292,7 @@ This is the hardest problem to fix because the symptom IS present in the text �
 | Production triage | GPT-5.5 (OpenAI) |
 | Provider independence / Anthropic | Claude Sonnet 4.6 |
 | Provider independence / Google | Gemini 2.5 Flash |
-| Cost-saving fallback | GPT-5.4 (OpenAI) |
+| Cost-saving fallback | GPT-5.4 (OpenAI) or GPT-5.6 Terra (OpenAI) |
 | Avoid entirely | GPT-5.4 Nano, Gemini 3.1 Pro |
 
 GPT-5.5 handles **13 more messages correctly** than Claude Sonnet 4.6 and **17 more** than Gemini 2.5 Flash out of 860 tests. All three are safe for clinical use.
@@ -267,6 +308,9 @@ Within the Gemini lineup, **2.5 Flash is the clear winner** — newer and more e
 ```bash
 # Re-run evaluation for any model
 python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --output data/eval/results.json
+python cli.py evaluate --provider openai --model gpt-5.6-sol --output data/eval/results.json
+python cli.py evaluate --provider openai --model gpt-5.6-terra --output data/eval/results.json
+python cli.py evaluate --provider openai --model gpt-5.6-luna --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-sonnet-4-6 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-opus-4-8 --output data/eval/results.json
 python cli.py evaluate --provider anthropic --model claude-opus-4-5 --output data/eval/results.json

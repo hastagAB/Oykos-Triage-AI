@@ -34,7 +34,7 @@ python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --max-cases 
 
 | Provider | Models | Install |
 |----------|--------|---------|
-| OpenAI | gpt-5.5-2026-04-23, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `pip install -e ".[openai]"` |
+| OpenAI | gpt-5.5-2026-04-23, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `pip install -e ".[openai]"` |
 | Anthropic | claude-sonnet-4-6, claude-sonnet-4-5, claude-opus-4-8, claude-opus-4-6, claude-opus-4-5 | `pip install -e ".[anthropic]"` |
 | Google | gemini-2.5-flash, gemini-2.5-pro | `pip install -e ".[gemini]"` |
 

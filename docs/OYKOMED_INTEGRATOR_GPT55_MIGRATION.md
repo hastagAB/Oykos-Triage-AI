@@ -26,6 +26,557 @@ flowchart LR
     C --> P
 ```
 
+## Minimal Implementation Plan
+
+This section is the implementation plan to follow. It deliberately avoids the larger `aiAgents/` refactor described later in this document.
+
+The existing `AiRoutingService` already contains the three agents:
+
+- `getUserQueryIntentAndSymptoms()` is the triage agent.
+- `executeAdvisorModel()` is the general child care agent.
+- `executeCasualModel()` is the casual agent.
+
+Therefore, the first production change needs only one new TypeScript file, three focused tests, and edits to the existing routing service. Do not change `TypeBotService`.
+
+### Exact Files To Change
+
+| Step | File | Change | Why |
+|---|---|---|---|
+| 1 | `packages/server/src/oykomed/constants/gpt55SymptomCatalog.ts` | Add canonical symptom catalog, prompt builder, tool schema, and result parser | Gives the triage agent one local source of truth |
+| 2 | `packages/server/src/oykomed/services/aiRoutingService.ts` | Import the helper and replace only `getUserQueryIntentAndSymptoms()` | Replaces the fine-tuned triage model without changing callers |
+| 3 | `packages/server/src/oykomed/services/aiRoutingService.ts` | Change advice fallback model to GPT-5.5 and omit temperature | Uses GPT-5.5 while retaining the established prompt and profile assembly |
+| 4 | `packages/server/src/oykomed/services/aiRoutingService.ts` | Change casual fallback model to GPT-5.5 and omit temperature | Uses GPT-5.5 while retaining normal/refusal modes and streaming |
+| 5 | `packages/server/src/oykomed/constants/symptomDefinitions.ts` | Reconcile from the new catalog only after clinical review | Keeps clarification text aligned with triage labels |
+| 6 | `packages/server/src/oykomed/services/gpt55Triage.test.ts` | Add parsing and adapter tests | Prevents invalid symptoms from reaching cases |
+| 7 | `packages/server/src/oykomed/services/aiRoutingService.test.ts` or existing focused tests | Add advice and casual model-selection tests | Verifies the existing methods select GPT-5.5 |
+| 8 | Project secret `CUSTOM_AI_MODEL_NAMES` | Point three agent model IDs at GPT-5.5 | Enables the deployed model without hard-coding it |
+
+No other source file is required for the first implementation.
+
+### Files Explicitly Not Changed
+
+Do not edit any of these files in the first implementation:
+
+| File | Reason |
+|---|---|
+| `packages/server/src/oykomed/services/typeBotService.ts` | It already consumes `TriageFlowIdentification`; preserving that return type avoids workflow changes |
+| `packages/server/src/oykomed/type/typeBotIntegrationTypes.ts` | `TriageFlowIdentification` remains unchanged |
+| `packages/server/src/oykomed/handler/typeBotHandler.ts` | API request and response behavior remain unchanged |
+| `packages/server/src/oykomed/aiOperations/cgpt.ts` | Reuse its SSM credentials, rate limit gate, retry, timeout, logging, and streaming |
+| `packages/server/src/oykomed/services/aiRoutingService.ts` router methods | The router is not one of the three replacements |
+
+## Step-by-Step Code Changes
+
+### Step 1: Add the Canonical Triage Catalog Helper
+
+**Create:** `packages/server/src/oykomed/constants/gpt55SymptomCatalog.ts`
+
+Copy the contents of the evaluated source catalog, [data/catalog/symptom_catalog.json](../data/catalog/symptom_catalog.json), into this file as TypeScript data. Do not copy the legacy `SYMPTOM_EXPLANATIONS` map as the triage source of truth.
+
+Start with this exact structure:
+
+```ts
+import { TriageFlowIdentification } from '../type/typeBotIntegrationTypes';
+
+export type CatalogSymptom = {
+  code: string;
+  labelIt: string;
+  labelEn: string;
+  triageDepth: string;
+  shortDefinition: string;
+};
+
+export type Gpt55TriageItem = {
+  code: string;
+  evidenceSpan: string;
+  negated: boolean;
+  hedged: boolean;
+  temporalStatus: 'current' | 'past_resolved' | 'chronic';
+  confidence: 'high' | 'medium' | 'low';
+  onset?: string | null;
+};
+
+export type Gpt55TriagePayload = {
+  symptoms: Gpt55TriageItem[];
+  excluded: Array<{
+    code: string;
+    reason: 'negated' | 'past_resolved' | 'below_threshold';
+    evidenceSpan?: string | null;
+  }>;
+  unmappedComplaints: string[];
+};
+
+export const GPT55_TRIAGE_MODEL = 'gpt-5.5-2026-04-23';
+
+export const SYMPTOM_CATALOG: readonly CatalogSymptom[] = [
+  {
+    code: 'SI001',
+    labelIt: 'Febbre',
+    labelEn: 'Fever',
+    triageDepth: 'Alta',
+    shortDefinition: 'Aumento della temperatura corporea rispetto al normale.',
+  },
+  // Add every remaining entry from data/catalog/symptom_catalog.json here.
+];
+
+const SYMPTOM_BY_CODE = new Map(
+  SYMPTOM_CATALOG.map((symptom) => [symptom.code, symptom])
+);
+
+const GENERIC_ILLNESS_PATTERN =
+  /\b(non\s+sta\s+bene|non\s+si\s+sente\s+bene|sta\s+male|è\s+malat[oa]|è\s+ammalat[oa])\b/i;
+```
+
+The final implementation must include all catalog entries. The small example above exists only to show the file shape.
+
+Add a prompt builder below the catalog:
+
+```ts
+export function buildGpt55TriageSystemPrompt(): string {
+  const catalogText = SYMPTOM_CATALOG.map(
+    (symptom) => [
+      `Codice: ${symptom.code}`,
+      `Etichetta: ${symptom.labelIt}`,
+      `Definizione: ${symptom.shortDefinition}`,
+    ].join('\n')
+  ).join('\n\n');
+
+  return `Sei un estrattore di sintomi pediatrici da messaggi di genitori italiani.
+
+Estrai tutti i sintomi attualmente presenti dal messaggio.
+Usa esclusivamente i codici del catalogo.
+Non includere sintomi negati, per esempio "non ha la febbre".
+Non includere sintomi risolti, per esempio "la tosse è passata".
+Per ogni sintomo estratto, evidenceSpan deve essere una sottostringa letterale del messaggio del genitore.
+Quando un sintomo è incerto, includilo con confidence "medium" o "low" e hedged true.
+Quando una lamentela non appartiene al catalogo, inserisci le parole del genitore in unmappedComplaints.
+
+CATALOGO SINTOMI
+${catalogText}`;
+}
+```
+
+Create the constrained tool schema in the same file. Constrain only the code. The application derives every label from the code after parsing.
+
+```ts
+export const GPT55_TRIAGE_TOOL = {
+  type: 'function' as const,
+  function: {
+    name: 'extract_pediatric_symptoms',
+    parameters: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        symptoms: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              code: { type: 'string', enum: SYMPTOM_CATALOG.map((symptom) => symptom.code) },
+              evidenceSpan: { type: 'string' },
+              negated: { type: 'boolean' },
+              hedged: { type: 'boolean' },
+              temporalStatus: { type: 'string', enum: ['current', 'past_resolved', 'chronic'] },
+              confidence: { type: 'string', enum: ['high', 'medium', 'low'] },
+              onset: { type: ['string', 'null'] },
+            },
+            required: ['code', 'evidenceSpan', 'negated', 'hedged', 'temporalStatus', 'confidence'],
+          },
+        },
+        excluded: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              code: { type: 'string', enum: SYMPTOM_CATALOG.map((symptom) => symptom.code) },
+              reason: { type: 'string', enum: ['negated', 'past_resolved', 'below_threshold'] },
+              evidenceSpan: { type: ['string', 'null'] },
+            },
+            required: ['code', 'reason'],
+          },
+        },
+        unmappedComplaints: {
+          type: 'array',
+          items: { type: 'string' },
+        },
+      },
+      required: ['symptoms', 'excluded', 'unmappedComplaints'],
+    },
+  },
+};
+```
+
+Finally, add the adapter that protects the existing TypeBot contract:
+
+```ts
+export function toTriageFlowIdentification(
+  message: string,
+  payload: Gpt55TriagePayload
+): TriageFlowIdentification {
+  const symptomCodes = new Set<string>();
+  const symptoms: string[] = [];
+
+  for (const item of payload.symptoms) {
+    const catalogSymptom = SYMPTOM_BY_CODE.get(item.code);
+    const isExcluded = item.negated || item.temporalStatus === 'past_resolved';
+    const hasValidEvidence = message.includes(item.evidenceSpan);
+
+    if (!catalogSymptom || isExcluded || !hasValidEvidence || symptomCodes.has(item.code)) {
+      continue;
+    }
+
+    symptomCodes.add(item.code);
+    symptoms.push(catalogSymptom.labelIt);
+  }
+
+  const newSymptoms = payload.unmappedComplaints
+    .map((complaint) => complaint.trim())
+    .filter(Boolean);
+  const needsSymptomDescription =
+    symptoms.length === 0 && newSymptoms.length === 0 && GENERIC_ILLNESS_PATTERN.test(message);
+
+  return {
+    isTriage: symptoms.length > 0 || newSymptoms.length > 0 || needsSymptomDescription,
+    symptoms,
+    newSymptoms,
+    needsSymptomDescription,
+    symptomDescriptionMessage: needsSymptomDescription
+      ? 'Per favore, prova a descrivermi con le tue parole uno o più sintomi che il bambino sta mostrando.'
+      : '',
+  };
+}
+```
+
+This helper is the only new production file required for the first triage release.
+
+### Step 2: Replace Only the Triage Method Body
+
+**Edit:** `packages/server/src/oykomed/services/aiRoutingService.ts`
+
+At the import block, add:
+
+```ts
+import {
+  buildGpt55TriageSystemPrompt,
+  GPT55_TRIAGE_MODEL,
+  GPT55_TRIAGE_TOOL,
+  Gpt55TriagePayload,
+  toTriageFlowIdentification,
+} from '../constants/gpt55SymptomCatalog';
+```
+
+Then replace the complete body of the existing `getUserQueryIntentAndSymptoms()` method. Do not rename the method and do not modify its call sites.
+
+```ts
+async getUserQueryIntentAndSymptoms(
+  userQuery: string,
+  _aiProvider: string,
+  _previousConversation: string,
+  _childrenHealthSummary: string,
+  timeoutMs?: number,
+  aiBypass?: AiBypassData
+): Promise<TriageFlowIdentification> {
+  if (aiBypass?.intent === AI_ROUTER_MODEL_OUTPUTS.TRIAGE && aiBypass.symptoms) {
+    return {
+      isTriage: true,
+      symptoms: aiBypass.symptoms,
+      newSymptoms: [],
+    };
+  }
+
+  try {
+    const configuredModel = (await this.getAiCustomModelIDs()).triageModelId;
+    const messages: unknown[] = [];
+    this.cgptUtils.pushMessage('system', buildGpt55TriageSystemPrompt(), messages);
+    this.cgptUtils.pushMessage('user', userQuery, messages);
+
+    const response = await this.cgptUtils.retryAI(
+      messages,
+      configuredModel || GPT55_TRIAGE_MODEL,
+      [GPT55_TRIAGE_TOOL],
+      'auto',
+      undefined,
+      timeoutMs ?? DEFAULT_AI_TIMEOUT_MS,
+      1024
+    );
+
+    const toolArguments = response?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+    if (!toolArguments) {
+      throw new Error('GPT-5.5 triage response did not include tool arguments.');
+    }
+
+    const payload = JSON.parse(toolArguments) as Gpt55TriagePayload;
+    return toTriageFlowIdentification(userQuery, payload);
+  } catch (error) {
+    logError('Error getting GPT-5.5 triage result', error, {
+      operation: 'getUserQueryIntentAndSymptoms',
+    });
+    errorTracker.trackError(error, {
+      service: 'ai-routing',
+      operation: 'getUserQueryIntentAndSymptoms',
+    });
+    return { isTriage: false, symptoms: [], newSymptoms: [] };
+  }
+}
+```
+
+Delete the old triage-only code inside this method after the replacement:
+
+- Loading `BOT_SYMPTOMS_LIST` from SSM.
+- Merging `SYMPTOM_EXPLANATIONS` into the runtime symptom list.
+- The `AI_PROVIDER.AMAZON` branch.
+- Vertex triage endpoint fallback.
+- The old fine-tuned fallback model `ft:gpt-4.1-2025-04-14:oykomed:oykomed-symptom-4-1:CdOLqMzI`.
+- The old `extract_symptoms` tool schema.
+- Triage conversation and health-summary prompt injection.
+
+Do not delete `BedrockUtil`, Vertex imports, or router logic elsewhere in the file. They may still be used by other paths until a separate cleanup task verifies they are unused.
+
+### Step 3: Switch the General Child Care Agent
+
+**Edit:** `packages/server/src/oykomed/services/aiRoutingService.ts`
+
+The existing `executeAdvisorModel()` method already builds the correct parent conversation and child profile context. Do not rewrite the prompt or the profile-building logic initially.
+
+Make only these changes:
+
+```ts
+// Before
+const advisorModelId = customAIModelsID.adviceModelId || 'gpt-5.1-2025-11-13';
+
+// After
+const advisorModelId = customAIModelsID.adviceModelId || GPT55_TRIAGE_MODEL;
+```
+
+Replace every literal temperature `0` in the three advisor execution calls with `undefined`:
+
+```ts
+// Before
+await this.cgptUtils.retryAI(messageList, advisorModelId, tools, 'auto', 0);
+
+// After
+await this.cgptUtils.retryAI(messageList, advisorModelId, tools, 'auto', undefined);
+```
+
+Use the same replacement for `executeAIStreamWithTools()`. Keep:
+
+- `CUSTOM_MODEL_AI_PROMPTS.advisorModel`.
+- The child profile and health-summary logic.
+- The `respond_parent_query` tool.
+- Existing direct-text fallback parsing.
+- The existing `aiBypass` behavior.
+
+The advice method must still return `Promise<string>`. Nothing calling it changes.
+
+### Step 4: Switch the Casual Agent
+
+**Edit:** `packages/server/src/oykomed/services/aiRoutingService.ts`
+
+The existing `executeCasualModel()` already owns normal mode, refusal mode, photo guidance, office hours, profile context, and streaming. Do not move this behavior into a new class in the first implementation.
+
+Make only these changes:
+
+```ts
+// Before
+const casualModelId = customAIModelsID.casualModelId || 'gpt-4.1-2025-04-14';
+
+// After
+const casualModelId = customAIModelsID.casualModelId || GPT55_TRIAGE_MODEL;
+```
+
+Change the temperature argument in all three casual calls from `0.7` to `undefined`:
+
+```ts
+// Streaming
+for await (const chunk of this.cgptUtils.executeAIStream(
+  messageList,
+  casualModelId,
+  undefined,
+  undefined,
+  undefined,
+  DEFAULT_AI_TIMEOUT_MS,
+  casualModelMaxOutputTokens
+)) {
+  response += chunk;
+  onChunk(chunk);
+}
+
+// Non-streaming and fallback
+aiResponse = await this.cgptUtils.retryAI(
+  messageList,
+  casualModelId,
+  undefined,
+  undefined,
+  undefined,
+  DEFAULT_AI_TIMEOUT_MS,
+  casualModelMaxOutputTokens
+);
+```
+
+Keep the existing `try/catch` around streaming and its non-streaming fallback. The method must still return its current Italian failure message when both paths fail.
+
+### Step 5: Update the Deployed Model Configuration
+
+**Edit outside source control:** the value of `PROJECT_SECRETS.CUSTOM_AI_MODEL_NAMES` in the Integrator project configuration.
+
+Use this JSON payload, preserving the existing router, clarification, and Vertex fields:
+
+```json
+{
+  "ROUTER_MODEL_ID": "<existing value>",
+  "TRIAGE_MODEL_ID": "gpt-5.5-2026-04-23",
+  "ADVICE_MODEL_ID": "gpt-5.5-2026-04-23",
+  "CLARIFICATION_MODEL_ID": "<existing value>",
+  "CASUAL_MODEL_ID": "gpt-5.5-2026-04-23",
+  "VERTEX_ROUTER_ENDPOINT": "<existing value>",
+  "VERTEX_TRIAGE_ENDPOINT": ""
+}
+```
+
+Set `VERTEX_TRIAGE_ENDPOINT` to an empty string for the new triage path. Otherwise the legacy Vertex branch remains configured even though the implementation no longer uses it.
+
+`getAiCustomModelIDs()` caches this secret for five minutes. Restart the server after changing it, or wait for the cache expiry before verifying the selected model.
+
+### Step 6: Reconcile Clarification Labels
+
+**Edit after triage tests pass:** `packages/server/src/oykomed/constants/symptomDefinitions.ts`
+
+This map is used for symptom explanations and clarification buttons. It is not the source of triage truth after Step 2, but it must contain every display label returned by `toTriageFlowIdentification()`.
+
+Make these decisions with clinical ownership before editing:
+
+| New catalog value | Legacy value | Required decision |
+|---|---|---|
+| `Poliuria (emissione di abbondante quantità di urina)` | `Poliuria` | Choose one display label, update catalog and explanation key together |
+| `Pollachiuria (necessità di urinare molto spesso ma con piccole quantità)` | `Pollachiuria` | Choose one display label, update catalog and explanation key together |
+| `Terrore notturno` | `Urla nel sonno in stato di semi incoscienza e forte agitazione` | Keep one clinically approved label and map the other only as a legacy alias |
+| No entry | `Feci molli` | Add it to the canonical catalog or explicitly treat it as non-canonical |
+| No entry | `Erezioni frequenti` | Add it to the canonical catalog or explicitly treat it as non-canonical |
+
+Do not release the triage change while these labels are unresolved. A returned triage label without an explanation map entry breaks the expected clarification experience.
+
+### Step 7: Add Tests Before Enabling GPT-5.5
+
+**Create:** `packages/server/src/oykomed/services/gpt55Triage.test.ts`
+
+The adapter can be tested without network access. Start with these exact tests:
+
+```ts
+import { toTriageFlowIdentification } from '../constants/gpt55SymptomCatalog';
+
+describe('toTriageFlowIdentification', () => {
+  it('keeps a catalog symptom with verbatim evidence', () => {
+    const result = toTriageFlowIdentification('Mio figlio ha la febbre alta', {
+      symptoms: [{
+        code: 'SI001',
+        evidenceSpan: 'ha la febbre alta',
+        negated: false,
+        hedged: false,
+        temporalStatus: 'current',
+        confidence: 'high',
+      }],
+      excluded: [],
+      unmappedComplaints: [],
+    });
+
+    expect(result).toEqual({
+      isTriage: true,
+      symptoms: ['Febbre'],
+      newSymptoms: [],
+      needsSymptomDescription: false,
+      symptomDescriptionMessage: '',
+    });
+  });
+
+  it('does not include a negated symptom', () => {
+    const result = toTriageFlowIdentification('Non ha la febbre', {
+      symptoms: [{
+        code: 'SI001',
+        evidenceSpan: 'Non ha la febbre',
+        negated: true,
+        hedged: false,
+        temporalStatus: 'current',
+        confidence: 'high',
+      }],
+      excluded: [],
+      unmappedComplaints: [],
+    });
+
+    expect(result.symptoms).toEqual([]);
+    expect(result.isTriage).toBe(false);
+  });
+
+  it('asks for description after a generic illness statement', () => {
+    const result = toTriageFlowIdentification('Mio figlio non sta bene', {
+      symptoms: [],
+      excluded: [],
+      unmappedComplaints: [],
+    });
+
+    expect(result).toMatchObject({
+      isTriage: true,
+      needsSymptomDescription: true,
+    });
+  });
+});
+```
+
+Add three more tests:
+
+1. An evidence span absent from the parent message does not become a symptom.
+2. The same code twice produces one display label.
+3. A non-catalog complaint appears in `newSymptoms`.
+
+**Edit:** `packages/server/src/oykomed/services/aiRoutingClassification.test.ts`
+
+Add small unit tests with `CGPTUtils` mocked that assert:
+
+```ts
+expect(mockRetryAI).toHaveBeenCalledWith(
+  expect.any(Array),
+  'gpt-5.5-2026-04-23',
+  expect.anything(),
+  expect.anything(),
+  undefined,
+  expect.any(Number),
+  expect.any(Number)
+);
+```
+
+Use one test for advice and one test for casual. Do not make live OpenAI calls from Jest.
+
+### Step 8: Run and Release
+
+From `Oykomed-Integrator/oykomed`:
+
+```powershell
+npm run build --workspace=@medplum/server
+npm run test --workspace=@medplum/server -- gpt55Triage.test.ts aiRoutingClassification.test.ts
+```
+
+From the root extraction repository:
+
+```powershell
+python cli.py evaluate --provider openai --model gpt-5.5-2026-04-23 --concurrency 10 --output data/eval/eval_gpt55_integrator_baseline.json
+```
+
+Release in this order:
+
+1. Deploy the source code with all three `*_MODEL_ID` values still set to the old values. Confirm server startup and existing traffic are unchanged.
+2. Change only `TRIAGE_MODEL_ID` to `gpt-5.5-2026-04-23`. Confirm the structured tool response and `TriageFlowIdentification` for a test parent account.
+3. Check negated, resolved, multi-symptom, generic-illness, and unmapped-complaint messages in a staging environment.
+4. Change `ADVICE_MODEL_ID` to GPT-5.5. Check a normal advice reply with a child profile and conversation history.
+5. Change `CASUAL_MODEL_ID` to GPT-5.5. Check normal mode, refusal mode, office-hours response, and streamed response.
+6. Keep the previous model IDs in the deployment runbook. Rollback is only a secret change plus server restart.
+
+### Why This Is the Minimal Path
+
+The initial implementation does not need a new agent framework because the current code already separates the three agent entry points. The only behavior that must fundamentally change is triage extraction. Advice and casual can use GPT-5.5 by changing their model selection while retaining their mature prompt and integration logic.
+
+Refactor into separate `aiAgents/` classes only after the GPT-5.5 behavior is stable and measured in production.
+
 ## Evidence and Scope
 
 The standalone extraction system uses a single GPT-5.5 call with a full symptom catalog and constrained structured output. Its documented evaluation result is 839 correct messages out of 860, or 97.6 percent exact-message accuracy.

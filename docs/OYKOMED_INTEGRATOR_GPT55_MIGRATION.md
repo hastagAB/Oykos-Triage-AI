@@ -1,5 +1,7 @@
 # Oykomed Integrator GPT-5.5 Agent Migration
 
+> **For an implementation agent:** start with [OYKOMED_INTEGRATOR_GPT55_AGENT_HANDOFF.md](OYKOMED_INTEGRATOR_GPT55_AGENT_HANDOFF.md). It defines the repository boundary, immutable contracts, required skills, execution order, validation commands, deployment checklist, and final reporting format. Use this document as the detailed technical specification.
+
 ## Purpose
 
 Replace the three existing parent-facing AI agents in `Oykomed-Integrator/oykomed` with specialist GPT-5.5 agents while keeping the router, TypeBot, FHIR case lifecycle, persistence, and client contracts unchanged.
